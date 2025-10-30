@@ -1,26 +1,240 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
+/* Base (default: light mode) */
+/* i want better colors */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light Mode */
+  --background: #fafafa;
+  --foreground: #151718;
+  --surface: #ffffff;
+  --text-muted: #64748b;
+  --border: #47aef3;
+  --primary: #0ea5e9;
+  --success: #14b8a6;
+  --error: #ef4444;
+
+  /* Additional Light Mode Colors */
+  --secondary: #e0f2fe; 
+  --accent: #a5f3fc;
+  --ring: #38bdf8;
+
+  /* Dark Mode */
+  --background-dark: #090f11;
+  --foreground-dark: #f0f9ff;
+  --surface-dark: #000000;
+  --text-muted-dark: #bae6fd;
+  --border-dark: #0e7490;
+  --primary-dark: #38bdf8;
+  --success-dark: #2dd4bf;
+  --error-dark: #dc2626;
+
+  /* Additional Dark Mode Colors */
+  --secondary-dark: #0c4a6e; 
+  --accent-dark: #164e63; 
+  --ring-dark: #22d3ee;
+
 }
 
+/* Dark mode */
+
+/* Tailwind theme definitions */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-ring: var(--ring);
+  
+  /* Dark mode mappings */
+  --color-background-dark: var(--background-dark);
+  --color-foreground-dark: var(--foreground-dark);
+  --color-surface-dark: var(--surface-dark);
+  --color-text-muted-dark: var(--text-muted-dark);
+  --color-border-dark: var(--border-dark);
+  --color-primary-dark: var(--primary-dark);
+  --color-success-dark: var(--success-dark);
+  --color-error-dark: var(--error-dark);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-accent-dark: var(--accent-dark);
+  --color-ring-dark: var(--ring-dark);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Gradient and Effect Utilities */
+@layer utilities {
+  .gradient-primary {
+    @apply bg-linear-to-r from-primary via-primary/70 to-primary/50;
+  }
+  
+  .gradient-secondary {
+    @apply bg-linear-to-r from-foreground to-primary;
+  }
+  
+  .gradient-accent {
+    @apply bg-linear-to-r from-accent to-accent/50;
+  }
+  
+  .glass-effect {
+    @apply bg-background/70 backdrop-blur-md border border-border/20;
+  }
+  
+  .gradient-mesh {
+    background: radial-gradient(at 0% 0%, var(--primary) 0%, transparent 50%),
+                radial-gradient(at 80% 20%, var(--accent) 0%, transparent 50%),
+                radial-gradient(at 80% 80%, var(--secondary) 0%, transparent 50%),
+                radial-gradient(at 20% 80%, var(--success) 0%, transparent 50%);
+    opacity: 0.1;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+  
+  .shimmer::before {
+    @apply absolute inset-0;
+    content: '';
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--border) 20%,
+      var(--border) 60%,
+      transparent 100%
+    );
+    animation: shimmer 2s infinite;
+    background-size: 200% 100%;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* New modern gradient variations */
+  .gradient-soft {
+    background: linear-gradient(
+      180deg,
+      var(--primary) 0%,
+      var(--accent) 100%
+    );
+    opacity: 0.8;
+  }
+
+  .gradient-shine {
+    background: linear-gradient(
+      45deg,
+      var(--background) 0%,
+      var(--primary) 25%,
+      var(--secondary) 50%,
+      var(--primary) 75%,
+      var(--background) 100%
+    );
+    background-size: 200% 100%;
+    animation: shine 3s linear infinite;
+  }
+
+  @keyframes shine {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+
+  .gradient-glow {
+    position: relative;
+  }
+
+  .gradient-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    filter: blur(10px);
+    opacity: 0.5;
+    z-index: -1;
   }
 }
 
+/* Global body styles */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, var(--ring-dark), var(--secondary));
+  }
+
+  /* Optional variations */
+  .text-gradient-secondary {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, var(--foreground), var(--primary));
+  }
+
+  .text-gradient-shine {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      45deg,
+      var(--primary),
+      var(--secondary)
+    );
+    background-size: 200% 100%;
+    animation: shine 2.5s linear infinite;
+  }
+  .text-gradient-one-time {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      80deg,
+      var(--primary),
+      var(--secondary)
+    );
+    background-size: 200% 100%;
+    animation: shine 5s linear forwards ;
+  }
+
+}
+
+.dark {
+  --background: var(--background-dark);
+  --foreground: var(--foreground-dark);
+  --surface: var(--surface-dark);
+  --text-muted: var(--text-muted-dark);
+  --border: var(--border-dark);
+  --primary: var(--primary-dark);
+  --success: var(--success-dark);
+  --error: var(--error-dark);
+  --secondary: var(--secondary-dark);
+  --accent: var(--accent-dark);
+  --ring: var(--ring-dark);
+  --gradient: var(--gradient-dark);
+  --gradient-primary: var(--gradient-primary-dark);
+  --gradient-mesh: var(--gradient-mesh-dark);
+  --shimmer: var(--shimmer-dark);
+
+}
+
