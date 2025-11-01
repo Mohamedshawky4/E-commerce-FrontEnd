@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
 @custom-variant dark (&:where(.dark, .dark *));
 /* Base (default: light mode) */
 /* i want better colors */
@@ -6,6 +10,7 @@
   /* Light Mode */
   --background: #fafafa;
   --foreground: #151718;
+  --background-secondary: #f6f6f6;
   --surface: #ffffff;
   --text-muted: #64748b;
   --border: #47aef3;
@@ -20,6 +25,7 @@
 
   /* Dark Mode */
   --background-dark: #090f11;
+  --background-secondary-dark: #1d1e2000;
   --foreground-dark: #f0f9ff;
   --surface-dark: #000000;
   --text-muted-dark: #bae6fd;
@@ -50,6 +56,7 @@
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-ring: var(--ring);
+  --color-background-secondary: var(--background-secondary);
   
   /* Dark mode mappings */
   --color-background-dark: var(--background-dark);
@@ -63,6 +70,7 @@
   --color-secondary-dark: var(--secondary-dark);
   --color-accent-dark: var(--accent-dark);
   --color-ring-dark: var(--ring-dark);
+  --color-background-secondary-dark: var(--background-secondary-dark);
 }
 
 /* Gradient and Effect Utilities */
@@ -235,6 +243,9 @@ body {
   --gradient-primary: var(--gradient-primary-dark);
   --gradient-mesh: var(--gradient-mesh-dark);
   --shimmer: var(--shimmer-dark);
+  --ring-dark: var(--ring-dark);
+  --ring-light: var(--ring-light);  
+  --background-secondary: var(--background-secondary-dark);
 
 }
 
