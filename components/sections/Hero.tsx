@@ -91,8 +91,8 @@ const Hero = () => {
       <div className="relative flex-1 flex items-center justify-center w-full h-[300px] sm:h-[400px] md:h-full z-10 mt-10 md:mt-0">
        
         {/* Product Image */}
-        <div className="relative w-[240px] sm:w-[320px] md:w-[420px] aspect-[3/4] flex items-end justify-center z-20">
-          <span className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-primary/10 via-white/0 to-transparent opacity-40 rounded-t-3xl pointer-events-none" />
+        <div className="relative w-60 sm:w-[320px] md:w-[420px] aspect-3/4 flex items-end justify-center z-20">
+          <span className="absolute inset-x-0 top-0 h-1/4 bg-linear-to-b from-primary/10 via-white/0 to-transparent opacity-40 rounded-t-3xl pointer-events-none" />
           <Image
             src="/images/product.jpg"
             alt="Featured Product"
@@ -103,14 +103,14 @@ const Hero = () => {
         </div>
 
         {/* Floating Offer Card */}
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[180px] sm:w-[220px] hidden md:block px-4 sm:px-6 py-3 sm:py-4 bg-white shadow-xl rounded-2xl border border-border flex flex-col items-center text-center z-30 animate-float">
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[180px] sm:w-[220px] md:block px-4 sm:px-6 py-3 sm:py-4 bg-white shadow-xl rounded-2xl border border-border flex flex-col items-center text-center z-30 animate-float">
           <div className="text-lg sm:text-xl font-extrabold text-primary ">20% OFF</div>
           <div className="text-xs sm:text-sm text-muted">For New Customers</div>
         </div>
       </div>
 
       {/* Background Gradient + Curve */}
-      <div className="absolute left-0 top-0 w-full md:w-1/2 h-full bg-gradient-to-r from-primary/3 via-transparent to-transparent pointer-events-none -z-10" />
+      <div className="absolute left-0 top-0 w-full md:w-1/2 h-full bg-linear-to-r from-primary/3 via-transparent to-transparent pointer-events-none -z-10" />
       <svg
         width="160"
         height="70"

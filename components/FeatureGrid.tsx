@@ -16,7 +16,7 @@ className?: string;
 
 const FeatureGrid: React.FC<FeatureGridProps> = ({ features, className }) => {
 return ( <section className="relative  px-8 sm:px-16 md:px-20">
-{/* Subtle gradient divider */} <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
+{/* Subtle gradient divider */} <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
 
   <motion.div
@@ -32,7 +32,7 @@ return ( <section className="relative  px-8 sm:px-16 md:px-20">
         className="text-center group max-w-xs flex-1 basis-[300px] md:basis-[30%]"
       >
         <div
-          className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-${feature.color}/20 to-${feature.color}/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
+          className={`w-16 h-16 mx-auto mb-4 bg-linear-to-br from-${feature.color}/20 to-${feature.color}/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
         >
           {feature.icon}
         </div>

@@ -9,10 +9,22 @@ import "swiper/css/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
+interface Product {
+  _id: string;
+  name: string;
+  images?: string[];
+  price: number;
+  discountPercent?: number;
+  discountedPrice?: number;
+  averageRating?: number;
+  slug?: string;
+  categories?: { _id: string; name: string; slug: string }[];
+}
 interface ProductSectionProps {
   title: string;
   endpoint?: string;
-  products?: any[];
+  //products is a array of objects make the type right not any
+  products?: Product[];
   linkHref?: string;
   autoplay?: boolean;
 }
@@ -24,7 +36,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   linkHref,
   autoplay = true,
 }) => {
-  const [products, setProducts] = useState<any[]>(initialProducts || []);
+  const [products, setProducts] = useState<Product[]>(initialProducts || []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +92,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
           }}
           className="pb-10"
         >
-          {products.map((p: any) => (
+          {products.map((p: Product) => (
             <SwiperSlide key={p._id} className="flex justify-center">
               <ProductCard product={p} />
             </SwiperSlide>

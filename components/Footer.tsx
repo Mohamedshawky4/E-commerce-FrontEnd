@@ -1,12 +1,14 @@
 import React from "react";
 import Link from "next/link";
-import { Facebook, Instagram, Twitter, Github, Store } from "lucide-react";
+import {
+  // Facebook, Instagram, Twitter, Github,
+   Store } from "lucide-react";
 import { socials, links, support } from "@/constants";
 
 const Footer = () => {
   return (
     <footer className="w-full bg-surface/80 backdrop-blur-md mt-20">
-      {/* Subtle gradient divider */} <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
+      {/* Subtle gradient divider */} <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
         {/* Logo + Description */}
         <div className="flex flex-col gap-3">
