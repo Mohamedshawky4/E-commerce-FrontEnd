@@ -5,17 +5,7 @@ import React, { useState } from "react";
 import { Heart, Star } from "lucide-react";
 import Button from "./Button";
 
-interface Product {
-  _id: string;
-  name: string;
-  images?: string[];
-  price: number;
-  discountPercent?: number;
-  discountedPrice?: number;
-  averageRating?: number;
-  slug?: string;
-  categories?: { _id: string; name: string; slug: string }[];
-}
+import { Product } from "@/types/product";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const [error, setError] = useState(false);

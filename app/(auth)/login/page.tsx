@@ -1,6 +1,6 @@
 "use client";
 import { motion } from 'framer-motion'
-import Footer from '@/components/Footer'
+// import Footer from '@/components/Footer'
 import AuthForm from '@/components/AuthForm'
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useRouter } from 'next/navigation';

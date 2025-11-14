@@ -139,6 +139,7 @@ const AuthForm: React.FC = () => {
     } catch (error) {
 
       alert("Authentication failed. Please try again.");
+
     } finally {
       setIsLoading(false);
     }
@@ -261,7 +262,7 @@ const AuthForm: React.FC = () => {
               variants={itemVariants}
               className="text-center relative z-10"
             >
-              <h2 className="text-2xl font-bold text-foreground  bg-gradient-to-r from-foreground via-foreground/90 to-foreground bg-clip-text">
+              <h2 className="text-2xl font-bold text-foreground  bg-linear-to-r from-foreground via-foreground/90 to-foreground bg-clip-text">
                 {isLogin ? "Welcome Back" : "Create Account"}
               </h2>
               

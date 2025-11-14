@@ -1,10 +1,10 @@
 "use client";
 import ProductCard from '@/components/ProductCard';
 import api from '@/lib/axios'
-import React, { useEffect } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { Product } from "@/types/product";
 const Page = () => {
-    const [products, setProducts] = React.useState([]);
+    const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
