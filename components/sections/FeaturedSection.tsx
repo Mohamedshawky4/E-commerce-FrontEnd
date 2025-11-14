@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import ProductCardSkeleton from "../ProductCardSkeleton";
 
 interface Product {
   _id: string;
@@ -20,10 +21,10 @@ interface Product {
   slug?: string;
   categories?: { _id: string; name: string; slug: string }[];
 }
+
 interface ProductSectionProps {
   title: string;
   endpoint?: string;
-  //products is a array of objects make the type right not any
   products?: Product[];
   linkHref?: string;
   autoplay?: boolean;
@@ -37,6 +38,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   autoplay = true,
 }) => {
   const [products, setProducts] = useState<Product[]>(initialProducts || []);
+  const [loading, setLoading] = useState(!initialProducts?.length);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,9 +48,14 @@ const ProductSection: React.FC<ProductSectionProps> = ({
         setProducts(response.data.products);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
-    if (!initialProducts?.length) fetchData();
+
+    if (!initialProducts?.length) {
+      fetchData();
+    }
   }, [endpoint, initialProducts]);
 
   return (
@@ -92,11 +99,21 @@ const ProductSection: React.FC<ProductSectionProps> = ({
           }}
           className="pb-10"
         >
-          {products.map((p: Product) => (
-            <SwiperSlide key={p._id} className="flex justify-center">
-              <ProductCard product={p} />
-            </SwiperSlide>
-          ))}
+          {/* Skeleton slides */}
+          {loading &&
+            Array.from({ length: 5 }).map((_, i) => (
+              <SwiperSlide key={i} className="flex justify-center">
+                <ProductCardSkeleton />
+              </SwiperSlide>
+            ))}
+
+          {/* Real products */}
+          {!loading &&
+            products.map((p) => (
+              <SwiperSlide key={p._id} className="flex justify-center">
+                <ProductCard product={p} />
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
     </section>

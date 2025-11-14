@@ -1,4 +1,5 @@
-import FeaturedSection from "@/components/sections/FeaturedSection";
+import dynamic from 'next/dynamic';
+const FeaturedSection = dynamic(() => import('@/components/sections/FeaturedSection'));
 import FeatureGrid from "@/components/FeatureGrid";
 import Hero from "@/components/sections/Hero";
 import { ShieldCheck, Truck, Headphones } from "lucide-react";
@@ -41,7 +42,7 @@ const features = [
 ];
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center  font-sans">
+    <main className="relative flex min-h-screen flex-col items-center justify-center  font-sans">
       {/* <div className="absolute left-0 top-0 w-full h-full min-h-screen bg-gradient-to-r from-primary/5 via-transparent to-transparent pointer-events-none -z-10" /> */}
 
         <Hero />
@@ -65,6 +66,6 @@ const features = [
         <FeatureGrid features={features} />
         
 
-    </div>
+    </main>
   );
 }
