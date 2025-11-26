@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
+export default {
   darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,42 +9,23 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Expose your original colors through CSS variables
       colors: {
-        bg: {
-          light: "#FAFAF9",
-          dark: "#0D0D0D",
-        },
-        surface: {
-          light: "#FFFFFF",
-          dark: "#1A1A1A",
-        },
-        text: {
-          light: "#111111",
-          dark: "#F5F5F5",
-        },
-        textMuted: {
-          light: "#4B5563",
-          dark: "#D1D5DB",
-        },
-        border: {
-          light: "#E5E5E5",
-          dark: "#262626",
-        },
-        primary: {
-          light: "#D4AF37",
-          dark: "#FACC15",
-        },
-        success: {
-          light: "#16A34A",
-          dark: "#22C55E",
-        },
-        error: {
-          light: "#DC2626",
-          dark: "#EF4444",
-        },
+        bg: "rgb(var(--bg) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        text: "rgb(var(--text) / <alpha-value>)",
+        textMuted: "rgb(var(--text-muted) / <alpha-value>)",
+        border: "rgb(var(--border) / <alpha-value>)",
+        primary: "rgb(var(--primary) / <alpha-value>)",
+        success: "rgb(var(--success) / <alpha-value>)",
+        error: "rgb(var(--error) / <alpha-value>)",
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
     },
   },
   plugins: [],
-};
-export default config;
+} satisfies Config;

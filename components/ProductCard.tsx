@@ -24,8 +24,8 @@ const ProductCard = ({ product }: { product: Product }) => {
       href={`/products/${product.slug}`}
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/20 dark:border-white/10 
       bg-white/40 dark:bg-white/5 backdrop-blur-xl 
-      shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/20 mb-4"
-    >
+      shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/20 mb-4 "
+     >
       {/* Product Image */}
       <div className="relative aspect-square w-full overflow-hidden">
         <Image

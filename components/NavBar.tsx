@@ -1,9 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Heart, ShoppingCart,
+import {
+  Heart, ShoppingCart,
   //  Store,
-    Menu, X } from "lucide-react";
+  Menu, X
+} from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import Button from "./Button";
 import { navLinks } from "@/constants";
@@ -15,7 +17,7 @@ interface NavBarProps {
 
 
 const NavBar = ({ cartItemCount }: NavBarProps) => {
-  const { initialized, logout } = useAuthStore();
+  const { initialized, logout, token } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -71,26 +73,32 @@ const NavBar = ({ cartItemCount }: NavBarProps) => {
           )}
         </Link>
 
-        {/* Example Button */}
+        {/* Auth Buttons */}
         <div className="hidden md:flex gap-2">
-          <Link href="/login">
+          {token ? (
             <Button variant="primary" size="sm" className="hover:-translate-y-0.5" onClick={logout}>
-              {initialized ? "Logout" : "Login"}
+              Logout
             </Button>
-          </Link>
+          ) : (
+            <Link href="/login">
+              <Button variant="primary" size="sm" className="hover:-translate-y-0.5">
+                Login
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Hamburger Menu */}
         <div className="md:hidden hover:cursor-pointer">
-            <Menu
-              size={24}
-              onClick={() => setIsMenuOpen(true)}
-            />
+          <Menu
+            size={24}
+            onClick={() => setIsMenuOpen(true)}
+          />
         </div>
       </div>
       {/* Mobile Menu */}
       <div className={`absolute top-0 left-0 w-full h-screen bg-surface/80 backdrop-blur-md flex flex-col items-center justify-center gap-8 transition-all duration-300 ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
-        <X size={24} onClick={() => setIsMenuOpen(false)}  className="absolute top-6 right-10 hover:cursor-pointer"/>
+        <X size={24} onClick={() => setIsMenuOpen(false)} className="absolute top-6 right-10 hover:cursor-pointer" />
         {navLinks.map((link) => (
           <Link
             key={link.name}
