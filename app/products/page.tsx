@@ -10,6 +10,7 @@ import { Product } from "@/types/product";
 import { PaginationButton } from '@/components/Pagination';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import api from '@/lib/axios';
+import Link from 'next/link';
 
 const Page = () => {
   const { products, loading, error, fetchProducts, pagination } = useProducts();
@@ -151,7 +152,7 @@ const Page = () => {
       {/* Breadcrumbs */}
       <div className="px-6 lg:px-16 py-4">
         <div className="text-sm text-muted-foreground">
-          <span className="hover:text-primary cursor-pointer">Home</span>
+          <Link href="/"><span className="hover:text-primary cursor-pointer">Home</span></Link>
           <span className="mx-2">/</span>
           <span className="text-foreground font-semibold">Products</span>
         </div>

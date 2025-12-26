@@ -7,7 +7,7 @@ type InputSize = "sm" | "md" | "lg";
 type InputType = "text" | "email" | "password" | "number" | "search";
 type InputVariant = "default" | "outline" | "ghost" | "disabled";
 
-interface InputProps {
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,7 +15,7 @@ interface InputProps {
   label?: string;
   name?: string;
   className?: string;
-  size?: InputSize;
+  inputSize?: InputSize;
   variant?: InputVariant;
   disabled?: boolean;
 }
@@ -25,12 +25,13 @@ const Input: React.FC<InputProps> = ({
   value,
   onChange,
   type = "text",
-  label = "mail",
+  label,
   name,
   className,
-  size = "md",
+  inputSize = "md",
   variant = "default",
   disabled = false,
+  ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -60,7 +61,7 @@ const Input: React.FC<InputProps> = ({
       {label && (
         <label
           htmlFor={name}
-          className="px-1 font-medium leading-6 text-md text-muted-foreground"
+          className="px-1 font-medium leading-6 text-xs uppercase tracking-widest text-muted-foreground"
         >
           {label}
         </label>
@@ -76,11 +77,12 @@ const Input: React.FC<InputProps> = ({
           disabled={disabled || variant === "disabled"}
           className={clsx(
             baseStyles,
-            sizeStyles[size],
+            sizeStyles[inputSize],
             variantStyles[variant],
             isPassword && "pr-10", // add padding for eye icon
             className
           )}
+          {...props}
         />
         {isPassword && (
           <button

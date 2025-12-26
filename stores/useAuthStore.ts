@@ -3,8 +3,11 @@ import { create } from "zustand";
 interface AuthState {
   email: string | null;
   token: string | null;
-  initialized: boolean; // 👈 NEW: track when we’ve checked localStorage
-  setUser: (email: string, token: string) => void;
+  refreshToken: string | null;
+  initialized: boolean;
+  setUser: (email: string, token: string, refreshToken: string) => void;
+  setToken: (token: string) => void;
+  setTokens: (token: string, refreshToken: string) => void;
   logout: () => void;
   initializeAuth: () => void;
 }
@@ -12,23 +15,43 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   email: null,
   token: null,
-  initialized: false, // 👈 starts false
+  refreshToken: null,
+  initialized: false,
 
-  setUser: (email, token) => {
+  setUser: (email, token, refreshToken) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("userEmail", email);
-    set({ email, token });
+    set({ email, token, refreshToken });
+  },
+
+  setToken: (token) => {
+    localStorage.setItem("token", token);
+    set({ token });
+  },
+
+  setTokens: (token, refreshToken) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
+    set({ token, refreshToken });
   },
 
   logout: () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("userEmail");
-    set({ email: null, token: null });
+    set({ email: null, token: null, refreshToken: null });
   },
 
   initializeAuth: () => {
     const token = localStorage.getItem("token");
+    const refreshToken = localStorage.getItem("refreshToken");
     const email = localStorage.getItem("userEmail");
-    set({ email: email ?? null, token: token ?? null, initialized: true }); // 👈 mark done
+    set({
+      email: email ?? null,
+      token: token ?? null,
+      refreshToken: refreshToken ?? null,
+      initialized: true
+    });
   },
 }));

@@ -11,113 +11,123 @@ import Link from "next/link";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 
 interface Product {
-  _id: string;
-  name: string;
-  images?: string[];
-  price: number;
-  discountPercent?: number;
-  discountedPrice?: number;
-  averageRating?: number;
-  slug?: string;
-  categories?: { _id: string; name: string; slug: string }[];
+    _id: string;
+    name: string;
+    images?: string[];
+    price: number;
+    discountPercent?: number;
+    discountedPrice?: number;
+    averageRating?: number;
+    slug?: string;
+    categories?: { _id: string; name: string; slug: string }[];
 }
 
 interface ProductSectionProps {
-  title: string;
-  endpoint?: string;
-  products?: Product[];
-  linkHref?: string;
-  autoplay?: boolean;
+    title: string;
+    endpoint?: string;
+    products?: Product[];
+    linkHref?: string;
+    autoplay?: boolean;
 }
 
 const ProductSection: React.FC<ProductSectionProps> = ({
-  title,
-  endpoint,
-  products: initialProducts,
-  linkHref,
-  autoplay = true,
+    title,
+    endpoint,
+    products: initialProducts,
+    linkHref,
+    autoplay = true,
 }) => {
-  const [products, setProducts] = useState<Product[]>(initialProducts || []);
-  const [loading, setLoading] = useState(!initialProducts?.length);
+    const [products, setProducts] = useState<Product[]>(initialProducts || []);
+    const [loading, setLoading] = useState(!initialProducts?.length);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!endpoint) return;
-      try {
-        const response = await api.get(endpoint);
-        setProducts(response.data.products);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Create a unique ID for navigation classes
+    const sectionId = title.toLowerCase().replace(/\s+/g, '-');
 
-    if (!initialProducts?.length) {
-      fetchData();
-    }
-  }, [endpoint, initialProducts]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!endpoint) return;
+            try {
+                const response = await api.get(endpoint);
+                setProducts(response.data.products);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-  return (
-    <section className="py-12 w-full flex flex-col items-center mb-8">
-      {/* Header */}
-      <div className="flex w-full max-w-7xl px-6 sm:px-8 justify-between items-center mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold">{title}</h2>
-        {linkHref && (
-          <Link
-            href={linkHref}
-            className="text-primary font-medium hover:underline hover:text-primary/80 transition"
-          >
-            See More →
-          </Link>
-        )}
-      </div>
+        if (!initialProducts?.length) {
+            fetchData();
+        }
+    }, [endpoint, initialProducts]);
 
-      <div className="relative w-full max-w-7xl px-2 sm:px-6">
-        {/* Custom Navigation Buttons */}
-        <button className="swiper-button-prev-custom absolute left-0 top-1/2 z-10 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-full opacity-60 shadow-lg hover:opacity-100 p-3 hover:bg-primary hover:text-white transition">
-          <ChevronLeft size={22} />
-        </button>
-        <button className="swiper-button-next-custom absolute right-0 top-1/2 z-10 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-full opacity-60 shadow-lg hover:opacity-100 p-3 hover:bg-primary hover:text-white transition">
-          <ChevronRight size={22} />
-        </button>
+    return (
+        <section className="py-16 w-full flex flex-col items-center overflow-hidden">
+            {/* Header */}
+            <div className="flex w-full max-w-[1600px] px-6 md:px-12 justify-between items-end mb-12">
+                <div className="space-y-1">
+                    <div className="w-12 h-1 bg-primary rounded-full opacity-50" />
+                    <h2 className="text-4xl md:text-5xl font-black text-metal tracking-tighter uppercase">{title}</h2>
+                </div>
+                {linkHref && (
+                    <Link
+                        href={linkHref}
+                        className="text-xs font-black tracking-[0.3em] uppercase text-primary hover:text-foreground transition-colors pb-1 border-b border-primary/20 hover:border-primary"
+                    >
+                        Explore All →
+                    </Link>
+                )}
+            </div>
 
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          navigation={{
-            prevEl: ".swiper-button-prev-custom",
-            nextEl: ".swiper-button-next-custom",
-          }}
-          autoplay={autoplay ? { delay: 3500, disableOnInteraction: false } : false}
-          spaceBetween={16}
-          slidesPerView={1.2}
-          breakpoints={{
-            480: { slidesPerView: 2, spaceBetween: 16 },
-            768: { slidesPerView: 3, spaceBetween: 20 },
-            1024: { slidesPerView: 4, spaceBetween: 24 },
-            1280: { slidesPerView: 5, spaceBetween: 30 },
-          }}
-          className="pb-10"
-        >
-          {/* Skeleton slides */}
-          {loading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <SwiperSlide key={i} className="flex justify-center">
-                <ProductCardSkeleton />
-              </SwiperSlide>
-            ))}
+            <div className="relative w-full max-w-[1600px] px-4 md:px-8">
+                {/* Custom Navigation Buttons */}
+                <div className="absolute top-1/2 -translate-y-1/2 left-4 md:left-8 z-30 pointer-events-none w-full flex justify-between pr-8 md:pr-16">
+                    <button className={`nav-prev-${sectionId} pointer-events-auto glass-card h-14 w-14 flex items-center justify-center text-foreground hover:text-primary transition-all rounded-full group active:scale-90 disabled:opacity-0`}>
+                        <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+                    </button>
+                    <button className={`nav-next-${sectionId} pointer-events-auto glass-card h-14 w-14 flex items-center justify-center text-foreground hover:text-primary transition-all rounded-full group active:scale-90 disabled:opacity-0`}>
+                        <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                </div>
 
-          {/* Real products */}
-          {!loading &&
-            products.map((p) => (
-              <SwiperSlide key={p._id} className="flex justify-center">
-                <ProductCard product={p} />
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      </div>
-    </section>
-  );
+                <Swiper
+                    modules={[Navigation, Autoplay]}
+                    navigation={{
+                        prevEl: `.nav-prev-${sectionId}`,
+                        nextEl: `.nav-next-${sectionId}`,
+                    }}
+                    autoplay={autoplay ? { delay: 4000, disableOnInteraction: false } : false}
+                    spaceBetween={32}
+                    slidesPerView={1.2}
+                    centeredSlides={true}
+                    loop={products.length > 5}
+                    breakpoints={{
+                        640: { slidesPerView: 2, centeredSlides: false, spaceBetween: 24 },
+                        1024: { slidesPerView: 3, centeredSlides: false, spaceBetween: 24 },
+                        1280: { slidesPerView: 4, centeredSlides: false, spaceBetween: 32 },
+                        1536: { slidesPerView: 5, centeredSlides: false, spaceBetween: 32 },
+                    }}
+                    className="!px-6 md:!px-12 !pb-12"
+                >
+                    {/* Skeleton slides */}
+                    {loading &&
+                        Array.from({ length: 6 }).map((_, i) => (
+                            <SwiperSlide key={i} className="flex justify-center">
+                                <ProductCardSkeleton />
+                            </SwiperSlide>
+                        ))}
+
+                    {/* Real products */}
+                    {!loading &&
+                        products.map((p) => (
+                            <SwiperSlide key={p._id} className="flex justify-center h-full">
+                                <ProductCard product={p} />
+                            </SwiperSlide>
+                        ))}
+                </Swiper>
+            </div>
+        </section>
+    );
 };
 
 export default ProductSection;

@@ -2,49 +2,42 @@ import React from "react";
 import Link from "next/link";
 import {
   // Facebook, Instagram, Twitter, Github,
-   Store } from "lucide-react";
+  Store
+} from "lucide-react";
 import { socials, links, support } from "@/constants";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-surface/80 backdrop-blur-md mt-20">
-      {/* Subtle gradient divider */} <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
-        {/* Logo + Description */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <Store className="text-primary" size={22} />
-            <p className="text-xl font-bold text-gradient">E-Commerce</p>
-          </div>
-          <p className="text-muted-foreground leading-relaxed">
-            Your one-stop shop for modern, stylish, and affordable products.  
-            Discover quality items made for you.
+    <footer className="relative w-full border-t border-border glass-card rounded-none py-16 mt-20">
+      <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-4 gap-12">
+        {/* Brand */}
+        <div className="space-y-6 md:col-span-2">
+          <Link href="/" className="text-3xl font-black text-metal tracking-tighter">
+            GENESIS<span className="text-primary text-glow">.</span>
+          </Link>
+          <p className="text-text-muted max-w-sm leading-relaxed font-medium">
+            Defining the next era of digital commerce. We blend cutting-edge technology with high-end aesthetics to bring you the future, today.
           </p>
-
-          {/* Socials */}
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4">
             {socials.map((social) => (
               <Link
                 key={social.name}
                 href={social.href}
-                className="p-2 rounded-lg hover:bg-primary transition-colors group"
+                className="w-10 h-10 rounded-xl glass-card flex items-center justify-center hover:border-primary transition-all group"
               >
-                <social.icon size={22} className="w-5 h-5 text-primary group-hover:text-background transition-colors" />
+                <social.icon size={18} className="text-foreground group-hover:text-primary transition-colors" />
               </Link>
             ))}
           </div>
         </div>
 
-        {/* Quick Links */}
-        <div className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold text-primary">Quick Links</h3>
-          <ul className="flex flex-col gap-2">
+        {/* Links */}
+        <div className="space-y-6">
+          <h3 className="text-xs font-black tracking-[0.3em] uppercase text-primary">Nexus</h3>
+          <ul className="space-y-4">
             {links.map((link) => (
               <li key={link.name}>
-                <Link
-                  href={link.href}
-                  className="hover:text-primary transition-colors duration-200"
-                >
+                <Link href={link.href} className="text-sm font-bold text-foreground/60 hover:text-foreground transition-colors">
                   {link.name}
                 </Link>
               </li>
@@ -53,15 +46,12 @@ const Footer = () => {
         </div>
 
         {/* Support */}
-        <div className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold text-primary">Support</h3>
-          <ul className="flex flex-col gap-2">
+        <div className="space-y-6">
+          <h3 className="text-xs font-black tracking-[0.3em] uppercase text-primary">Support</h3>
+          <ul className="space-y-4">
             {support.map((item) => (
               <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className="hover:text-primary transition-colors duration-200"
-                >
+                <Link href={item.href} className="text-sm font-bold text-foreground/60 hover:text-foreground transition-colors">
                   {item.name}
                 </Link>
               </li>
@@ -70,9 +60,9 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-border text-center py-4 text-xs text-muted-foreground">
-        © {new Date().getFullYear()} <span className="text-primary font-medium">E-Commerce</span>. All rights reserved.
+      <div className="container mx-auto px-6 md:px-12 mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black tracking-[0.2em] text-foreground/20 uppercase">
+        <p>© {new Date().getFullYear()} GENESIS DIGITAL</p>
+        <p>FORGED BY ANTIGRAVITY</p>
       </div>
     </footer>
   );
