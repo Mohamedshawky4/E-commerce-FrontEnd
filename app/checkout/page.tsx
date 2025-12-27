@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import api from "@/lib/axios";
 import { useCartStore } from "@/stores/cartStore";
+import { toast } from "sonner";
 
 const CheckoutPage = () => {
     const router = useRouter();
@@ -62,7 +63,7 @@ const CheckoutPage = () => {
             } else if (provider === "stripe" && paymentResponse.data.clientSecret) {
                 // Here you would normally use Stripe SDK to open the checkout
                 // For now, let's pretend it redirects or we just simulated success
-                alert("Stripe Payment Initiated. Redirecting...");
+                toast.info("Stripe Payment Hub Authorized. Redirecting to secure gateway...");
                 // router.push(`/checkout/stripe?secret=${paymentResponse.data.clientSecret}`);
             } else if (provider === "cod") {
                 await clearCart();
@@ -70,7 +71,7 @@ const CheckoutPage = () => {
             }
         } catch (error: any) {
             console.error("Order failed:", error);
-            alert(error.response?.data?.message || "Checkout failed. Trace log for details.");
+            toast.error(error.response?.data?.message || "Authorization failed. Check nexus link status.");
         } finally {
             setIsLoading(false);
         }
@@ -79,7 +80,7 @@ const CheckoutPage = () => {
     if (!mounted) return null;
 
     return (
-        <div className="container mx-auto px-4 py-12 min-h-screen">
+        <div className="container mx-auto px-4 py-12 ">
             <motion.button
                 onClick={() => router.back()}
                 className="mb-8 flex items-center gap-2 text-[10px] font-black tracking-widest text-foreground/40 hover:text-primary transition-all uppercase"
@@ -171,10 +172,11 @@ const CheckoutPage = () => {
                                 variant="liquid"
                                 size="lg"
                                 fullWidth
-                                disabled={isLoading}
+                                isLoading={isLoading}
                                 className="py-6 font-black tracking-[0.3em] text-[12px]"
+                                rightIcon={<ShieldCheck size={18} />}
                             >
-                                {isLoading ? "AUTHORIZING..." : "CONFIRM ORDER"}
+                                CONFIRM ORDER
                             </Button>
                         </div>
                     </div>

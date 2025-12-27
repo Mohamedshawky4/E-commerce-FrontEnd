@@ -28,26 +28,25 @@ export default function SortDropdown({ onSort }: SortDropdownProps) {
     onSort(value.sortBy);
   };
 
-const options: SortOption[] = [
-  { label: "Price Low to High", sortBy: "price" },
-  { label: "Price High to Low", sortBy: "-price" },
+  const options: SortOption[] = [
+    { label: "Price Low to High", sortBy: "price" },
+    { label: "Price High to Low", sortBy: "-price" },
 
-  { label: "Discount Low to High", sortBy: "discountPercent" },
-  { label: "Discount High to Low", sortBy: "-discountPercent" },
-  { label: " Rating Low to High", sortBy: "averageRating" },
-  { label: " Rating High to Low", sortBy: "-averageRating" },
+    { label: "Discount Low to High", sortBy: "discountPercent" },
+    { label: "Discount High to Low", sortBy: "-discountPercent" },
+    { label: " Rating Low to High", sortBy: "averageRating" },
+    { label: " Rating High to Low", sortBy: "-averageRating" },
 
-  { label: "Brand (A-Z)", sortBy: "brand" },
-  { label: "Brand (Z-A)", sortBy: "-brand" },
-];
+    { label: "Brand (A-Z)", sortBy: "brand" },
+    { label: "Brand (Z-A)", sortBy: "-brand" },
+  ];
 
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {/* i want to be full rounded */}
-        <Button variant="primary" className="flex items-center gap-2 rounded-full">
-          <ArrowUpDown size={16} />
+        <Button variant="primary" className="rounded-full" leftIcon={<ArrowUpDown size={16} />}>
           {selected}
         </Button>
       </DropdownMenuTrigger>

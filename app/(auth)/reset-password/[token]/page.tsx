@@ -87,10 +87,10 @@ const ResetPasswordPage = () => {
                                 variant="liquid"
                                 size="lg"
                                 fullWidth
-                                disabled={isLoading}
+                                isLoading={isLoading}
                                 className="font-black tracking-widest"
                             >
-                                {isLoading ? "UPDATING NEXUS..." : "RECALIBRATE PASSWORD"}
+                                RECALIBRATE PASSWORD
                             </Button>
                         </form>
                     ) : (

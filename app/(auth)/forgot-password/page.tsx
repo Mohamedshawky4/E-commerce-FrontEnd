@@ -77,10 +77,10 @@ const ForgotPasswordPage = () => {
                                 variant="liquid"
                                 size="lg"
                                 fullWidth
-                                disabled={isLoading}
+                                isLoading={isLoading}
                                 className="font-black tracking-widest"
                             >
-                                {isLoading ? "TRANSMITTING..." : "SEND RECOVERY LINK"}
+                                SEND RECOVERY LINK
                             </Button>
                         </form>
                     ) : (

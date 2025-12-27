@@ -2,6 +2,7 @@
 import React from "react";
 import clsx from "clsx";
 import { motion, HTMLMotionProps } from "framer-motion";
+import { Loader2 } from "lucide-react";
 
 type ButtonVariant = "primary" | "outline" | "ghost" | "danger" | "success" | "secondary" | "metal" | "liquid";
 type ButtonSize = "sm" | "md" | "lg";
@@ -11,6 +12,9 @@ interface ButtonProps extends Omit<HTMLMotionProps<"button">, "variant"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
+  isLoading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -20,13 +24,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       fullWidth = false,
+      isLoading = false,
+      leftIcon,
+      rightIcon,
       className,
+      disabled,
       ...props
     },
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 hover:cursor-pointer active:scale-95";
+      "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 hover:cursor-pointer active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 leading-tight";
 
     const variants: Record<ButtonVariant, string> = {
       primary:
@@ -48,20 +56,37 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizes: Record<ButtonSize, string> = {
-      sm: "text-sm px-3 py-1.5",
-      md: "text-base px-5 py-2.5",
-      lg: "text-lg px-8 py-3.5",
+      sm: "text-sm px-3 py-1.5 gap-1.5",
+      md: "text-base px-5 py-2.5 gap-2",
+      lg: "text-lg px-8 py-3.5 gap-3",
     };
 
     return (
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={!disabled && !isLoading ? { scale: 1.01 } : {}}
+        whileTap={!disabled && !isLoading ? { scale: 0.98 } : {}}
         ref={ref as any}
-        className={clsx(baseStyles, variants[variant], sizes[size], fullWidth && "w-full", className)}
+        disabled={disabled || isLoading}
+        className={clsx(
+          baseStyles,
+          variants[variant],
+          sizes[size],
+          fullWidth && "w-full",
+          className
+        )}
         {...props}
       >
-        <span className="relative z-10">{children}</span>
+        <span className="relative z-10 flex items-center justify-center gap-[inherit] mt-px">
+          {isLoading ? (
+            <Loader2 className="w-[1.2em] h-[1.2em] animate-spin shrink-0" />
+          ) : (
+            <>
+              {leftIcon && <span className="shrink-0">{leftIcon}</span>}
+              <span className="whitespace-nowrap text-center">{children}</span>
+              {rightIcon && <span className="shrink-0">{rightIcon}</span>}
+            </>
+          )}
+        </span>
         {variant === "liquid" && (
           <motion.div
             className="absolute inset-0 opacity-20"

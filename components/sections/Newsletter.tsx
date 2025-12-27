@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Button from "../Button";
 import Input from "../Input";
-import { Mail } from "lucide-react";
+import { toast } from "sonner";
+import { Mail, ArrowRight } from "lucide-react";
 
 const Newsletter = () => {
     const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ const Newsletter = () => {
         // Handle newsletter subscription logic here
         console.log("Subscribed with:", email);
         setEmail("");
-        alert("Thanks for subscribing!");
+        toast.success("Vector Authorized. Welcome to the Nexus.");
     };
 
     return (
@@ -76,6 +77,7 @@ const Newsletter = () => {
                         <Button
                             type="submit"
                             variant="liquid"
+                            rightIcon={<ArrowRight size={18} />}
                             className="rounded-2xl px-10 py-4 font-black tracking-widest"
                         >
                             AUTHORIZE

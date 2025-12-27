@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ShoppingCart } from "lucide-react";
 import Button from "./Button";
 import { useCartStore } from "@/stores/cartStore";
 
@@ -79,16 +79,26 @@ const ProductCard = ({ product }: { product: Product }) => {
 
                 <div className="pt-2">
                     <Button
-                        variant="metal"
+                        variant={product.stock === 0 ? "outline" : "metal"}
                         fullWidth
                         size="sm"
                         className="text-[10px] tracking-[0.2em] font-black py-3 rounded-xl"
+                        disabled={product.stock === 0}
+                        leftIcon={product.stock !== 0 && !(product.variants && product.variants.length > 0) ? <ShoppingCart size={14} /> : undefined}
                         onClick={(e) => {
+                            if (product.variants && product.variants.length > 0) {
+                                // Let the link handle it to go to product page
+                                return;
+                            }
                             e.preventDefault();
                             addItem(product._id);
                         }}
                     >
-                        ADD TO CART
+                        {product.stock === 0
+                            ? "OUT OF STOCK"
+                            : product.variants && product.variants.length > 0
+                                ? "SELECT OPTIONS"
+                                : "ADD TO CART"}
                     </Button>
                 </div>
             </div>

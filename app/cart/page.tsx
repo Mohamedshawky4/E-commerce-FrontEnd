@@ -29,7 +29,7 @@ const CartPage = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-28 min-h-screen">
+        <div className="container mx-auto px-4 pt-8 pb-0 ">
             <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -87,12 +87,36 @@ const CartPage = () => {
                                         <h3 className="text-lg font-bold text-metal tracking-tight group-hover:text-primary transition-colors">
                                             {item.product.name}
                                         </h3>
+                                        <div className="flex flex-wrap gap-2 mb-2">
+                                            {item.variantId && item.product.variants && (
+                                                <>
+                                                    {(() => {
+                                                        const variant = item.product.variants.find(v => v._id === item.variantId);
+                                                        if (!variant) return null;
+                                                        return (
+                                                            <>
+                                                                {variant.size && (
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 glass-card border-primary/20 text-primary">
+                                                                        Size: {variant.size}
+                                                                    </span>
+                                                                )}
+                                                                {variant.color && (
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 glass-card border-primary/20 text-primary">
+                                                                        Color: {variant.color}
+                                                                    </span>
+                                                                )}
+                                                            </>
+                                                        );
+                                                    })()}
+                                                </>
+                                            )}
+                                        </div>
                                         <p className="text-sm font-black text-primary text-glow">${item.product.price}</p>
                                     </div>
 
                                     <div className="flex items-center gap-4 py-2 px-4 rounded-xl bg-foreground/5 border border-white/5">
                                         <button
-                                            onClick={() => updateQuantity(item._id, Math.max(1, item.quantity - 1))}
+                                            onClick={() => updateQuantity(item.product._id, Math.max(1, item.quantity - 1), item.variantId)}
                                             className="hover:text-primary transition-colors disabled:opacity-20"
                                             disabled={item.quantity <= 1}
                                         >
@@ -100,7 +124,7 @@ const CartPage = () => {
                                         </button>
                                         <span className="text-xs font-black min-w-[20px] text-center">{item.quantity}</span>
                                         <button
-                                            onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                                            onClick={() => updateQuantity(item.product._id, item.quantity + 1, item.variantId)}
                                             className="hover:text-primary transition-colors"
                                         >
                                             <Plus size={14} />
@@ -108,7 +132,7 @@ const CartPage = () => {
                                     </div>
 
                                     <button
-                                        onClick={() => removeItem(item._id)}
+                                        onClick={() => removeItem(item.product._id, item.variantId)}
                                         className="p-3 rounded-xl hover:bg-rose-500/10 hover:text-rose-500 transition-all text-foreground/30"
                                     >
                                         <Trash2 size={18} />
@@ -144,8 +168,14 @@ const CartPage = () => {
                             </div>
 
                             <Link href="/checkout" className="block">
-                                <Button variant="liquid" size="lg" fullWidth className="py-5 font-black tracking-[0.2em]">
-                                    CHECKOUT <ArrowRight className="m-auto w-5 h-5" />
+                                <Button
+                                    variant="liquid"
+                                    size="lg"
+                                    fullWidth
+                                    className="py-5 font-black tracking-[0.2em]"
+                                    rightIcon={<ArrowRight size={20} />}
+                                >
+                                    CHECKOUT
                                 </Button>
                             </Link>
 

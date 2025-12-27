@@ -20,7 +20,7 @@ const SuccessContent = () => {
     if (!mounted) return null;
 
     return (
-        <div className="container mx-auto px-4 py-32 min-h-screen flex flex-col items-center justify-center">
+        <div className="container mx-auto px-4 py-12  flex flex-col items-center justify-center">
             <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -44,7 +44,7 @@ const SuccessContent = () => {
                     <p className="text-[10px] font-black tracking-[0.4em] text-primary uppercase">Transmission Complete</p>
                 </div>
 
-                <div className="glass-card p-10 space-y-6 bg-white/5 border-white/10">
+                <div className="glass-card p-10 space-y-4 bg-white/5 border-white/10">
                     <div className="space-y-2">
                         <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest">Order Identifier</p>
                         <p className="text-xl font-bold font-mono tracking-tight text-metal truncate">
@@ -58,13 +58,23 @@ const SuccessContent = () => {
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link href="/" className="w-full sm:w-auto">
-                        <Button variant="metal" size="lg" className="px-10 font-black tracking-widest">
-                            <Home className="mr-2" size={18} /> RETURN HOME
+                        <Button
+                            variant="metal"
+                            size="lg"
+                            className="px-10 font-black tracking-widest"
+                            rightIcon={<Home size={18} />}
+                        >
+                            Return Home
                         </Button>
                     </Link>
                     <Link href="/products" className="w-full sm:w-auto">
-                        <Button variant="liquid" size="lg" className="px-10 font-black tracking-widest">
-                            CONTINUE BROWSE <ChevronRight className="ml-2" size={18} />
+                        <Button
+                            variant="liquid"
+                            size="lg"
+                            className="px-10 font-black tracking-widest"
+                            rightIcon={<ChevronRight size={18} />}
+                        >
+                            CONTINUE BROWSE
                         </Button>
                     </Link>
                 </div>

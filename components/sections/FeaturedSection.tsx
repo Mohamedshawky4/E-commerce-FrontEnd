@@ -48,7 +48,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({
             if (!endpoint) return;
             try {
                 const response = await api.get(endpoint);
-                setProducts(response.data.products);
+                const data = response.data;
+                const fetchedProducts = data.products || data.relatedProducts || [];
+                setProducts(fetchedProducts);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -100,11 +102,11 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                     spaceBetween={32}
                     slidesPerView={1.2}
                     centeredSlides={true}
-                    loop={products.length > 5}
+                    loop={(products?.length || 0) > 5}
                     breakpoints={{
-                        640: { slidesPerView: 2, centeredSlides: false, spaceBetween: 24 },
-                        1024: { slidesPerView: 3, centeredSlides: false, spaceBetween: 24 },
-                        1280: { slidesPerView: 4, centeredSlides: false, spaceBetween: 32 },
+                        640: { slidesPerView: 3, centeredSlides: false, spaceBetween: 24 },
+                        1024: { slidesPerView: 4, centeredSlides: false, spaceBetween: 24 },
+                        1280: { slidesPerView: 5, centeredSlides: false, spaceBetween: 32 },
                         1536: { slidesPerView: 5, centeredSlides: false, spaceBetween: 32 },
                     }}
                     className="!px-6 md:!px-12 !pb-12"

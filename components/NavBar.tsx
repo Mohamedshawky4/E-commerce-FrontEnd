@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import {
   Heart, ShoppingCart,
-  Menu, X
+  Menu, X, LogOut, Zap
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import Button from "./Button";
@@ -79,12 +79,12 @@ const NavBar = () => {
         {/* Auth Buttons */}
         <div className="hidden md:flex gap-3">
           {token ? (
-            <Button variant="metal" size="sm" onClick={logout}>
+            <Button variant="metal" size="sm" onClick={logout} leftIcon={<LogOut size={14} />}>
               LOGOUT
             </Button>
           ) : (
             <Link href="/login">
-              <Button variant="liquid" size="sm">
+              <Button variant="liquid" size="sm" leftIcon={<Zap size={14} />}>
                 ACCESS
               </Button>
             </Link>
