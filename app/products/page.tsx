@@ -11,13 +11,16 @@ import { PaginationButton } from '@/components/Pagination';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import api from '@/lib/axios';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const Page = () => {
   const { products, loading, error, fetchProducts, pagination } = useProducts();
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get('search') || "";
 
   const [sortBy, setSortBy] = useState<string>("");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
+  const [debouncedSearch, setDebouncedSearch] = useState<string>(initialSearch);
   const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState({

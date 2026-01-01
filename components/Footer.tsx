@@ -5,6 +5,7 @@ import {
   Store
 } from "lucide-react";
 import { socials, links, support } from "@/constants";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -12,8 +13,19 @@ const Footer = () => {
       <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Brand */}
         <div className="space-y-6 md:col-span-2">
-          <Link href="/" className="text-3xl font-black text-metal tracking-tighter">
-            GENESIS<span className="text-primary text-glow">.</span>
+          <Link href="/" className="flex items-center gap-4 group">
+            <div className="relative w-12 h-12 overflow-hidden rounded-2xl border border-white/5 flex items-center justify-center p-1 group-hover:border-primary/30 transition-all duration-500">
+              <Image
+                src="/logo-Photoroom.png"
+                alt="SPECTRA Logo"
+                width={48}
+                height={48}
+                className="object-contain"
+              />
+            </div>
+            <span className="text-3xl font-black text-metal tracking-tighter group-hover:text-primary transition-colors duration-300">
+              SPECTRA<span className="text-primary text-glow">.</span>
+            </span>
           </Link>
           <p className="text-text-muted max-w-sm leading-relaxed font-medium">
             Defining the next era of digital commerce. We blend cutting-edge technology with high-end aesthetics to bring you the future, today.
@@ -61,7 +73,7 @@ const Footer = () => {
       </div>
 
       <div className="container mx-auto px-6 md:px-12 mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black tracking-[0.2em] text-foreground/20 uppercase">
-        <p>© {new Date().getFullYear()} GENESIS DIGITAL</p>
+        <p>© {new Date().getFullYear()} SPECTRA DIGITAL</p>
         <p>FORGED BY ANTIGRAVITY</p>
       </div>
     </footer>

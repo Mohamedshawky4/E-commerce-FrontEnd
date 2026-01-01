@@ -21,14 +21,21 @@ interface Product {
 
 // --- NEURAL PARTICLE FIELD ---
 const NeuralParticles = ({ mouseX, mouseY }: { mouseX: any; mouseY: any }) => {
-    const particles = useMemo(() => [...Array(40)].map((_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 2 + 1,
-        duration: Math.random() * 20 + 10,
-        delay: Math.random() * 5
-    })), []);
+    const [particles, setParticles] = useState<any[]>([]);
+
+    useEffect(() => {
+        const generated = [...Array(40)].map((_, i) => ({
+            id: i,
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+            size: Math.random() * 2 + 1,
+            duration: Math.random() * 20 + 10,
+            delay: Math.random() * 5
+        }));
+        setParticles(generated);
+    }, []);
+
+    if (particles.length === 0) return null;
 
     return (
         <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
@@ -119,17 +126,17 @@ const Hero = () => {
     return (
         <section
             ref={containerRef}
-            className="relative w-full  flex items-center overflow-hidden bg-[#030303] selection:bg-primary selection:text-black"
+            className="relative w-full  flex items-center overflow-hidden bg-background selection:bg-primary selection:text-black"
         >
             {/* --- ADVANCED NEURAL BACKGROUND --- */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 <motion.div style={{ x: bgX, y: bgY }} className="absolute inset-[-15%]">
                     <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-primary/10 rounded-full blur-[200px] animate-pulse" />
                     <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-secondary/10 rounded-full blur-[180px] animate-pulse" style={{ animationDelay: '2s' }} />
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-size-[80px_80px]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-size-[80px_80px] opacity-20" />
                 </motion.div>
                 <NeuralParticles mouseX={mouseX} mouseY={mouseY} />
-                <div className="absolute inset-0 bg-radial-gradient(circle_at_center,transparent_0%,#030303_90%)" />
+                <div className="absolute inset-0 bg-radial-gradient(circle_at_center,transparent_0%,var(--background)_90%)" />
             </div>
 
             <div className="container mx-auto px-6 lg:px-20 xl:px-32 relative z-10 w-full">
@@ -142,10 +149,10 @@ const Hero = () => {
                                 initial={{ opacity: 0, scale: 0.8, x: -20 }}
                                 animate={{ opacity: 1, scale: 1, x: 0 }}
                                 transition={{ duration: 0.8 }}
-                                className="inline-flex items-center gap-4 px-6  rounded-full border border-white/5 bg-white/2 backdrop-blur-3xl shadow-2xl"
+                                className="inline-flex items-center gap-4 px-6  rounded-full border border-border bg-surface/30 backdrop-blur-3xl shadow-2xl"
                             >
                                 <Activity size={12} className="text-primary animate-pulse" />
-                                <span className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase">Neural Network Active</span>
+                                <span className="text-[10px] font-black tracking-[0.5em] text-text-muted uppercase">Neural Network Active</span>
                             </motion.div>
 
                             <h1 className="text-8xl md:text-[10rem] xl:text-[12rem] font-black leading-[0.78] tracking-tighter flex flex-col perspective-1000">
@@ -153,7 +160,7 @@ const Hero = () => {
                                     initial={{ opacity: 0, rotateX: 90 }}
                                     animate={{ opacity: 1, rotateX: 0 }}
                                     transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                                    className="text-white relative"
+                                    className="text-foreground relative"
                                 >
                                     ELITE
                                     <span className="absolute inset-0 text-primary/10 blur-sm translate-x-1 translate-y-1">ELITE</span>
@@ -162,14 +169,14 @@ const Hero = () => {
                                     initial={{ opacity: 0, x: -50 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.3, duration: 1.2 }}
-                                    className="italic bg-linear-to-r from-primary via-white to-secondary bg-clip-text text-transparent"
+                                    className="italic bg-linear-to-r from-primary via-foreground to-secondary bg-clip-text text-transparent"
                                 >
                                     RETAIL
                                 </motion.span>
                             </h1>
 
-                            <div className="text-xl text-white/20 leading-relaxed max-w-lg font-medium border-l border-primary/20 pl-10 ml-2 relative overflow-hidden group">
-                                <span className="relative z-10">The Genesis Vault offers a <span className="text-white">hand-picked selection</span> of the world's most exclusive digital assets.</span>
+                            <div className="text-xl text-text-muted leading-relaxed max-w-lg font-medium border-l border-primary/20 pl-10 ml-2 relative overflow-hidden group">
+                                <span className="relative z-10">The Spectra Vault offers a <span className="text-foreground">hand-picked selection</span> of the world's most exclusive digital assets.</span>
                                 <motion.div
                                     animate={{ left: ["-100%", "200%"] }}
                                     transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
@@ -184,7 +191,7 @@ const Hero = () => {
                                     variant="liquid"
                                     size="lg"
                                     onClick={() => router.push("/products")}
-                                    className="h-[80px] px-16 group relative overflow-hidden ring-1 ring-white/10"
+                                    className="h-[80px] px-16 group relative overflow-hidden ring-1 ring-border"
                                 >
                                     <span className="relative z-10 text-[11px] font-black tracking-[0.6em] uppercase">Enter Showcase</span>
                                     <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -193,10 +200,10 @@ const Hero = () => {
                             </motion.div>
 
                             <div className="flex gap-10 items-center opacity-40 hover:opacity-100 transition-opacity duration-500">
-                                <div className="h-10 w-px bg-white/10" />
+                                <div className="h-10 w-px bg-border" />
                                 <div className="space-y-1">
-                                    <div className="text-2xl font-black text-white">$4.2M+</div>
-                                    <div className="text-[10px] font-bold text-white/30 tracking-widest uppercase">Inventory Locked</div>
+                                    <div className="text-2xl font-black text-foreground">$4.2M+</div>
+                                    <div className="text-[10px] font-bold text-text-muted tracking-widest uppercase">Inventory Locked</div>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +214,7 @@ const Hero = () => {
                         {loading ? (
                             <div className="flex flex-col items-center gap-6">
                                 <div className="w-16 h-16 border-t-2 border-primary rounded-full animate-spin shadow-[0_0_20px_rgba(var(--primary),0.3)]" />
-                                <span className="text-[10px] font-black tracking-[0.6em] text-white/20 uppercase animate-pulse">Synchronizing Data</span>
+                                <span className="text-[10px] font-black tracking-[0.6em] text-text-muted uppercase animate-pulse">Synchronizing Data</span>
                             </div>
                         ) : (
                             <div className="relative w-full h-full flex items-center justify-center">
@@ -240,7 +247,7 @@ const Hero = () => {
                                                     className="group cursor-pointer"
                                                     onClick={() => router.push(`/products/${prod.slug}`)}
                                                 >
-                                                    <div className="relative w-full h-full rounded-[3rem] bg-[#080808] border border-white/[0.07] overflow-hidden shadow-[0_60px_120px_rgba(0,0,0,0.9)] transition-all duration-700 hover:border-primary/50 ring-1 ring-white/5">
+                                                    <div className="relative w-full h-full rounded-[3rem] bg-surface border border-border overflow-hidden shadow-[0_60px_120px_rgba(0,0,0,0.5)] transition-all duration-700 hover:border-primary/50 ring-1 ring-border/5">
                                                         {/* Product Visual */}
                                                         <div className="absolute inset-0">
                                                             <Image
@@ -249,7 +256,7 @@ const Hero = () => {
                                                                 fill
                                                                 className="object-cover opacity-50 group-hover:opacity-100 transition-opacity duration-1000 group-hover:scale-110"
                                                             />
-                                                            <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/10 to-black/95" />
+                                                            <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/10 to-background/95" />
                                                         </div>
 
                                                         {/* Advanced Micro-UI */}
@@ -258,7 +265,7 @@ const Hero = () => {
                                                                 <div className="px-4 py-1.5 bg-primary/10 backdrop-blur-2xl rounded-full border border-primary/30 shadow-[0_0_15px_rgba(var(--primary),0.2)]">
                                                                     <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Verified Elite</span>
                                                                 </div>
-                                                                <div className="w-12 h-12 rounded-full glass-card flex items-center justify-center text-white/10 group-hover:text-primary group-hover:bg-primary/5 transition-all duration-700">
+                                                                <div className="w-12 h-12 rounded-full glass-card flex items-center justify-center text-text-muted overflow-hidden group-hover:text-primary group-hover:bg-primary/5 transition-all duration-700">
                                                                     <Star size={20} className={prod.averageRating ? "fill-primary/20 text-primary" : ""} />
                                                                 </div>
                                                             </div>
@@ -267,14 +274,14 @@ const Hero = () => {
                                                                 <div className="space-y-2">
                                                                     <div className="flex items-center gap-3">
                                                                         <div className="h-px w-6 bg-primary/40" />
-                                                                        <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.4em]">{prod.brand || "GENESIS"}</span>
+                                                                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-[0.4em]">{prod.brand || "SPECTRA"}</span>
                                                                     </div>
-                                                                    <h2 className="text-4xl font-black text-white tracking-tighter leading-[0.9]">{prod.name}</h2>
+                                                                    <h2 className="text-4xl font-black text-foreground tracking-tighter leading-[0.9]">{prod.name}</h2>
                                                                 </div>
 
                                                                 <div className="flex justify-between items-center pt-2">
                                                                     <div className="space-y-1">
-                                                                        <span className="text-[10px] font-black text-white/15 uppercase tracking-[0.3em]">Value</span>
+                                                                        <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Value</span>
                                                                         <span className="text-3xl font-black text-primary font-mono block">${prod.price}</span>
                                                                     </div>
                                                                     <motion.div
@@ -311,13 +318,13 @@ const Hero = () => {
                                             initial={{ opacity: 0, x: -30 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 1.5 + i * 0.2 }}
-                                            className="py-2 px-6 border-l-2 border-primary/20 bg-white/2 backdrop-blur-xl group hover:border-primary transition-colors"
+                                            className="py-2 px-6 border-l-2 border-primary/20 bg-surface/30 backdrop-blur-xl group hover:border-primary transition-colors"
                                         >
                                             <div className="flex items-center gap-3 mb-1">
                                                 <stat.icon size={10} className="text-primary/40 group-hover:text-primary transition-colors" />
-                                                <div className="text-[8px] font-black tracking-[0.3em] text-white/10 uppercase">{stat.label}</div>
+                                                <div className="text-[8px] font-black tracking-[0.3em] text-text-muted uppercase">{stat.label}</div>
                                             </div>
-                                            <div className="text-xs font-black text-white font-mono group-hover:text-primary transition-colors">{stat.value}</div>
+                                            <div className="text-xs font-black text-foreground font-mono group-hover:text-primary transition-colors">{stat.value}</div>
                                         </motion.div>
                                     ))}
                                 </div>
@@ -327,7 +334,7 @@ const Hero = () => {
                                     {products.map((_, i) => (
                                         <div
                                             key={i}
-                                            className={`w-1 h-1 rounded-full transition-all duration-700 ${i === activeIndex ? "bg-primary h-8" : "bg-white/10"}`}
+                                            className={`w-1 h-1 rounded-full transition-all duration-700 ${i === activeIndex ? "bg-primary h-8" : "bg-border"}`}
                                         />
                                     ))}
                                 </div>
@@ -340,7 +347,7 @@ const Hero = () => {
 
             {/* Neural Scroll hint */}
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6">
-                <div className="h-20 w-px bg-white/5 relative overflow-hidden">
+                <div className="h-20 w-px bg-border relative overflow-hidden">
                     <motion.div
                         animate={{ y: ["-100%", "100%"] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
@@ -348,8 +355,8 @@ const Hero = () => {
                     />
                 </div>
                 <div className="flex items-center gap-6">
-                    <span className="text-[9px] font-black tracking-[1em] text-white/10 uppercase">Synchronize Down</span>
-                    <ChevronRight size={12} className="text-white/10 animate-pulse" />
+                    <span className="text-[9px] font-black tracking-[1em] text-text-muted uppercase">Synchronize Down</span>
+                    <ChevronRight size={12} className="text-text-muted animate-pulse" />
                 </div>
             </div>
         </section>

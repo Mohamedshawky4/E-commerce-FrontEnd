@@ -213,3 +213,14 @@
 .animate-shimmer {
   animation: shimmer 2s infinite;
 }
+
+.logo-transparent {
+  -webkit-mask-image: var(--mask-url);
+  mask-image: var(--mask-url);
+  -webkit-mask-mode: luminance;
+  mask-mode: luminance;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
