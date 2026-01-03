@@ -5,12 +5,15 @@ import React, { useState } from "react";
 import { Heart, Star, ShoppingCart } from "lucide-react";
 import Button from "./Button";
 import { useCartStore } from "@/stores/cartStore";
-
+import { useWishlistStore } from "@/stores/wishlistStore";
 import { Product } from "@/types/product";
 
 const ProductCard = ({ product }: { product: Product }) => {
     const [error, setError] = useState(false);
     const { addItem } = useCartStore();
+    const { toggleWishlist, isInWishlist } = useWishlistStore();
+
+    const isFav = isInWishlist(product._id);
 
     const imageUrl =
         product.images &&
@@ -45,10 +48,16 @@ const ProductCard = ({ product }: { product: Product }) => {
 
                 {/* Heart Icon */}
                 <button
-                    onClick={(e) => e.preventDefault()}
-                    className="absolute right-4 top-4 rounded-xl glass-card p-2 text-foreground/50 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:text-rose-500 hover:border-rose-500/50"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        toggleWishlist(product as any);
+                    }}
+                    className={`absolute right-4 top-4 rounded-xl glass-card p-2 transition-all duration-300 z-20 ${isFav
+                        ? "text-rose-500 opacity-100 border-rose-500/30 bg-rose-500/10 shadow-[0_0_15px_rgba(244,63,94,0.3)]"
+                        : "text-foreground/50 opacity-0 group-hover:opacity-100 hover:text-rose-500 hover:border-rose-500/50"
+                        }`}
                 >
-                    <Heart size={18} />
+                    <Heart size={18} fill={isFav ? "currentColor" : "none"} />
                 </button>
             </div>
 

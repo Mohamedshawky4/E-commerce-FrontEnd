@@ -9,6 +9,11 @@ export interface WishlistItem {
     price: number;
     images: string[];
     slug: string;
+    discountedPrice?: number;
+    discountPercent?: number;
+    stock: number;
+    variants?: any[];
+    averageRating?: number;
 }
 
 interface WishlistState {
@@ -34,7 +39,9 @@ export const useWishlistStore = create<WishlistState>()(
                 set({ isLoading: true });
                 try {
                     const response = await api.get("/wishlist");
-                    set({ items: response.data.wishlist.products, error: null });
+                    // Backend returns: res.json({ success: true, wishlist: wishlist.products });
+                    // So response.data.wishlist is the array of products.
+                    set({ items: response.data.wishlist || [], error: null });
                 } catch (err: any) {
                     set({ error: err.response?.data?.message || "Failed to fetch wishlist" });
                 } finally {
@@ -49,7 +56,7 @@ export const useWishlistStore = create<WishlistState>()(
                         await api.delete(`/wishlist/${product._id}`);
                         set({ items: get().items.filter((item) => item._id !== product._id) });
                     } else {
-                        await api.post("/wishlist", { productId: product._id });
+                        await api.post("/wishlist", { productIdOrSlug: product._id });
                         set({ items: [...get().items, product] });
                     }
                 } catch (err: any) {
@@ -71,7 +78,7 @@ export const useWishlistStore = create<WishlistState>()(
             },
         }),
         {
-            name: "genesis-wishlist-storage",
+            name: "spectra-wishlist-storage",
         }
     )
 );

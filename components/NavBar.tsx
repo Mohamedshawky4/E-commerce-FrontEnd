@@ -12,11 +12,13 @@ import SearchBar from "./SearchBar";
 import { navLinks } from "@/constants";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useCartStore } from "@/stores/cartStore";
+import { useWishlistStore } from "@/stores/wishlistStore";
 import { useEffect } from "react";
 
 const NavBar = () => {
   const { logout, token, initializeAuth } = useAuthStore();
   const { getTotalItems } = useCartStore();
+  const { items, fetchWishlist } = useWishlistStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -24,6 +26,12 @@ const NavBar = () => {
     setMounted(true);
     initializeAuth();
   }, [initializeAuth]);
+
+  useEffect(() => {
+    if (token) {
+      fetchWishlist();
+    }
+  }, [token, fetchWishlist]);
 
   const cartItemCount = getTotalItems();
 
@@ -77,9 +85,14 @@ const NavBar = () => {
           {/* Wishlist */}
           <Link
             href="/wishlist"
-            className="p-2.5 rounded-xl border border-border/5 hover:border-border/20 transition-all hover:bg-foreground/5"
+            className="relative p-2.5 rounded-xl border border-border/5 hover:border-border/20 transition-all hover:bg-foreground/5"
           >
             <Heart size={20} className="text-foreground/80" />
+            {mounted && items.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-black w-4 h-4 flex items-center justify-center rounded-md shadow-[0_0_10px_rgba(244,63,94,0.4)]">
+                {items.length}
+              </span>
+            )}
           </Link>
 
           {/* Cart Icon */}

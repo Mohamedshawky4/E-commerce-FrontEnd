@@ -10,17 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 
-interface Product {
-    _id: string;
-    name: string;
-    images?: string[];
-    price: number;
-    discountPercent?: number;
-    discountedPrice?: number;
-    averageRating?: number;
-    slug?: string;
-    categories?: { _id: string; name: string; slug: string }[];
-}
+import { Product } from "@/types/product";
 
 interface ProductSectionProps {
     title: string;
