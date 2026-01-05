@@ -254,6 +254,7 @@ const Hero = () => {
                                                                 src={prod.images?.[0] || "/images/product.jpg"}
                                                                 alt={prod.name}
                                                                 fill
+                                                                priority={i === 0}
                                                                 className="object-cover opacity-50 group-hover:opacity-100 transition-opacity duration-1000 group-hover:scale-110"
                                                             />
                                                             <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/10 to-background/95" />
@@ -296,7 +297,8 @@ const Hero = () => {
 
                                                         {/* Scanning Refraction Beam */}
                                                         <motion.div
-                                                            animate={{ top: ["-10%", "110%"] }}
+                                                            initial={{ y: "-100%" }}
+                                                            animate={{ y: "1100%" }}
                                                             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                                                             className="absolute inset-x-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent blur-[1px] opacity-0 group-hover:opacity-100"
                                                         />

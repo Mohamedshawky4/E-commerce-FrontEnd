@@ -1,12 +1,12 @@
 "use client";
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useProduct } from '@/hooks/useProduct';
 import { useCartStore } from '@/stores/cartStore';
 import Button from '@/components/Button';
-import { Star, Truck, ShieldCheck, ArrowRight, Minus, Plus, Heart, ChevronRight, Share2, ShoppingCart, Maximize2, X } from 'lucide-react';
+import { Star, Truck, ShieldCheck, Heart, ShoppingCart, Maximize2, X, Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
-import { ProductVariant } from '@/types/product';
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -33,7 +33,7 @@ const ProductPage = () => {
         <div className="absolute inset-0 animate-ping bg-primary/20 rounded-full" />
         <div className="absolute inset-0 animate-spin border-t-2 border-primary rounded-full" />
       </div>
-      <p className="text-[10px] font-black tracking-[0.4em] text-primary uppercase animate-pulse">Initializing Nexus Nexus Link...</p>
+      <p className="text-[10px] font-black tracking-[0.4em] text-primary uppercase animate-pulse">Initializing Nexus Link...</p>
     </div>
   );
 
@@ -81,6 +81,7 @@ const ProductPage = () => {
               alt={product.name}
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-110"
+              priority
             />
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <div className="p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
@@ -134,27 +135,6 @@ const ProductPage = () => {
                     priority
                   />
                 </motion.div>
-
-                {/* Thumbnail strip in Fullscreen */}
-                {product.images && product.images.length > 1 && (
-                  <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 px-6 py-4 glass-card border-white/10 rounded-3xl max-w-[90vw] overflow-x-auto scrollbar-hide">
-                    {product.images.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMainImage(img);
-                        }}
-                        className={clsx(
-                          "relative w-20 h-20 rounded-xl overflow-hidden border-2 flex-shrink-0 transition-all",
-                          mainImage === img ? "border-primary scale-110 shadow-[0_0_20px_rgba(var(--primary-rgb),0.4)]" : "border-transparent opacity-40"
-                        )}
-                      >
-                        <Image src={img} alt={`${product.name} ${idx}`} fill className="object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -267,22 +247,10 @@ const ProductPage = () => {
                     <Plus size={20} />
                   </button>
                 </div>
-                <div className="text-sm">
-                  {matchedVariant ? (
-                    <span className={clsx("font-bold", matchedVariant.stock > 0 ? "text-green-500" : "text-rose-500")}>
-                      {matchedVariant.stock > 0 ? `${matchedVariant.stock} units available` : "Sold Out"}
-                    </span>
-                  ) : (
-                    <span className={clsx("font-bold", product.stock > 0 ? "text-green-500" : "text-rose-500")}>
-                      {product.stock > 0 ? `${product.stock} units available` : "Out of Stock"}
-                    </span>
-                  )}
-                </div>
               </div>
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex gap-4">
             <Button
               variant={canAddToCart ? "metal" : "outline"}
@@ -295,28 +263,6 @@ const ProductPage = () => {
             >
               {isOutOfStock ? "STRICTLY OUT OF STOCK" : canAddToCart ? "ADD TO CART" : "SELECT OPTIONS"}
             </Button>
-          </div>
-
-          {/* Features */}
-          <div className="grid grid-cols-2 gap-4 pt-8">
-            <div className="flex items-center gap-4 p-4 glass-card rounded-2xl">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <Truck size={24} className="text-primary" />
-              </div>
-              <div>
-                <p className="text-xs font-black uppercase tracking-tighter">Fast Delivery</p>
-                <p className="text-[10px] text-muted-foreground">Within 2-3 business days</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 p-4 glass-card rounded-2xl">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <ShieldCheck size={24} className="text-primary" />
-              </div>
-              <div>
-                <p className="text-xs font-black uppercase tracking-tighter">Secure Payment</p>
-                <p className="text-[10px] text-muted-foreground">100% encrypted privacy</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

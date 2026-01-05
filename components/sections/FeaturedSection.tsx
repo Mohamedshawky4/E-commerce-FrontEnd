@@ -4,8 +4,6 @@ import ProductCard from "../ProductCard";
 import api from "@/lib/axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import ProductCardSkeleton from "../ProductCardSkeleton";

@@ -13,7 +13,9 @@ import api from '@/lib/axios';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-const Page = () => {
+import { Suspense } from 'react';
+
+const ProductsContent = () => {
   const { products, loading, error, fetchProducts, pagination } = useProducts();
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get('search') || "";
@@ -277,6 +279,14 @@ const Page = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const Page = () => {
+  return (
+    <Suspense fallback={<div className="mt-20 px-6 lg:px-16 py-20 text-center">Loading products...</div>}>
+      <ProductsContent />
+    </Suspense>
   );
 };
 

@@ -3,11 +3,11 @@ const FeaturedSection = dynamic(() => import('@/components/sections/FeaturedSect
 const Testimonials = dynamic(() => import('@/components/sections/Testimonials'));
 const FeatureGrid = dynamic(() => import('@/components/FeatureGrid'));
 const Newsletter = dynamic(() => import('@/components/sections/Newsletter'));
+const CategoriesSection = dynamic(() => import('@/components/sections/CategoriesSection'));
+const PromoBanner = dynamic(() => import('@/components/sections/PromoBanner'));
 
 import Hero from "@/components/sections/Hero";
 import { ShieldCheck, Truck, Headphones } from "lucide-react";
-import CategoriesSection from "@/components/sections/CategoriesSection";
-import PromoBanner from "@/components/sections/PromoBanner";
 
 export default function Home() {
 
@@ -53,11 +53,11 @@ export default function Home() {
       <CategoriesSection />
 
       {/* <div id="products-section"> */}
-        <FeaturedSection
-          title="Featured Products"
-          endpoint="/products?sort=-price"
-          linkHref="/products"
-        />
+      <FeaturedSection
+        title="Featured Products"
+        endpoint="/products?sort=-price"
+        linkHref="/products"
+      />
       {/* </div> */}
 
       <PromoBanner />

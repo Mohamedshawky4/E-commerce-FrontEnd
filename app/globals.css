@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@import "swiper/css";
-@import "swiper/css/navigation";
-@import "swiper/css/pagination";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -54,7 +51,7 @@
   body {
     background: var(--background);
     color: var(--foreground);
-    font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-outfit), var(--font-inter), system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     overflow-x: hidden;
@@ -97,24 +94,6 @@
     100% {
       transform: skewX(-20deg) translateX(150%);
     }
-  }
-
-  .liquid-flow {
-    @apply relative overflow-hidden;
-  }
-
-  .liquid-flow::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at center, var(--liquid-mesh-2), transparent 70%),
-      radial-gradient(circle at 20% 30%, var(--liquid-mesh-1), transparent 50%),
-      radial-gradient(circle at 80% 70%, var(--liquid-mesh-1), transparent 50%);
-    animation: liquid-rotate 25s linear infinite;
-    z-index: 0;
   }
 
   @keyframes liquid-rotate {
@@ -173,14 +152,6 @@
     }
   }
 
-  /* Optimized Liquid Utilities */
-  .fluid-orb {
-    @apply absolute rounded-full blur-[80px] opacity-10;
-    background: radial-gradient(circle at center, var(--primary), var(--secondary));
-    will-change: transform;
-    animation: flow 25s infinite alternate ease-in-out;
-  }
-
   @keyframes flow {
     from {
       transform: translate(-5%, -5%) scale(1);
@@ -212,15 +183,4 @@
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
-}
-
-.logo-transparent {
-  -webkit-mask-image: var(--mask-url);
-  mask-image: var(--mask-url);
-  -webkit-mask-mode: luminance;
-  mask-mode: luminance;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
 }
