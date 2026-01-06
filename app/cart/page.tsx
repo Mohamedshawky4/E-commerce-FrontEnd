@@ -4,13 +4,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { m, AnimatePresence } from "framer-motion";
 
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from "lucide-react";
+import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, X } from "lucide-react";
 import Button from "@/components/Button";
 import { useCartStore } from "@/stores/cartStore";
 
 const CartPage = () => {
-    const { items, fetchCart, updateQuantity, removeItem, getTotalPrice, isLoading } = useCartStore();
+    const {
+        items, fetchCart, updateQuantity, removeItem, getSubtotal, getTotalPrice,
+        isLoading, coupon, giftCard, applyCoupon, applyGiftCard, removeCoupon, removeGiftCard
+    } = useCartStore();
     const [mounted, setMounted] = useState(false);
+    const [promoCode, setPromoCode] = useState("");
+    const [applying, setApplying] = useState(false);
+
 
     useEffect(() => {
         setMounted(true);
@@ -152,11 +158,66 @@ const CartPage = () => {
                         >
                             <h2 className="text-2xl font-black text-metal tracking-tighter uppercase">Summary</h2>
 
-                            <div className="space-y-4">
+                            {/* Promo Code Input */}
+                            <div className="space-y-3">
+                                <p className="text-[10px] font-black tracking-widest text-foreground/40 uppercase">HAVE A PROMO CODE?</p>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={promoCode}
+                                        onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                                        placeholder="CODE"
+                                        className="flex-1 bg-foreground/5 border border-white/5 rounded-xl px-4 py-3 text-xs font-black tracking-widest focus:outline-none focus:border-primary/50 transition-colors"
+                                    />
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={async () => {
+                                            setApplying(true);
+                                            try {
+                                                if (promoCode.startsWith('GC-')) {
+                                                    await applyGiftCard(promoCode);
+                                                } else {
+                                                    await applyCoupon(promoCode);
+                                                }
+                                                setPromoCode("");
+                                            } catch (err) { }
+                                            setApplying(false);
+                                        }}
+                                        isLoading={applying}
+                                        className="border border-white/10"
+                                    >
+                                        APPLY
+                                    </Button>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 pt-4 border-t border-white/5">
                                 <div className="flex justify-between text-xs font-black tracking-widest text-foreground/40 uppercase">
                                     <span>Subtotal</span>
-                                    <span className="text-foreground">${mounted ? getTotalPrice().toFixed(2) : "0.00"}</span>
+                                    <span className="text-foreground">${mounted ? getSubtotal().toFixed(2) : "0.00"}</span>
                                 </div>
+
+                                {coupon && (
+                                    <div className="flex justify-between text-xs font-black tracking-widest text-primary uppercase">
+                                        <div className="flex items-center gap-2">
+                                            <span>Coupon ({coupon.code})</span>
+                                            <button onClick={removeCoupon} className="hover:text-rose-500"><X size={12} /></button>
+                                        </div>
+                                        <span>-${coupon.discountAmount.toFixed(2)}</span>
+                                    </div>
+                                )}
+
+                                {giftCard && (
+                                    <div className="flex justify-between text-xs font-black tracking-widest text-primary uppercase">
+                                        <div className="flex items-center gap-2">
+                                            <span>Gift Card ({giftCard.code})</span>
+                                            <button onClick={removeGiftCard} className="hover:text-rose-500"><X size={12} /></button>
+                                        </div>
+                                        <span>-${giftCard.appliedAmount.toFixed(2)}</span>
+                                    </div>
+                                )}
+
                                 <div className="flex justify-between text-xs font-black tracking-widest text-foreground/40 uppercase">
                                     <span>Shipment Fee</span>
                                     <span className="text-foreground">$50.00</span>
@@ -164,9 +225,10 @@ const CartPage = () => {
                                 <div className="h-[1px] bg-white/10 my-4" />
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm font-black tracking-widest uppercase">Total Amount</span>
-                                    <span className="text-3xl font-black text-primary text-glow">${mounted ? (getTotalPrice() + 50).toFixed(2) : "0.00"}</span>
+                                    <span className="text-3xl font-black text-primary text-glow">${mounted ? getTotalPrice().toFixed(2) : "0.00"}</span>
                                 </div>
                             </div>
+
 
                             <Link href="/checkout" className="block">
                                 <Button

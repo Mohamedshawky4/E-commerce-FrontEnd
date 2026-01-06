@@ -21,6 +21,16 @@ interface CartState {
     items: CartItem[];
     isLoading: boolean;
     error: string | null;
+    coupon: {
+        code: string;
+        discountAmount: number;
+    } | null;
+    giftCard: {
+        code: string;
+        balance: number;
+        appliedAmount: number;
+    } | null;
+    shippingFee: number;
 
     // Actions
     fetchCart: () => Promise<void>;
@@ -28,9 +38,14 @@ interface CartState {
     removeItem: (productId: string, variantId?: string) => Promise<void>;
     updateQuantity: (productId: string, quantity: number, variantId?: string) => Promise<void>;
     clearCart: () => Promise<void>;
+    applyCoupon: (code: string) => Promise<void>;
+    applyGiftCard: (code: string) => Promise<void>;
+    removeCoupon: () => void;
+    removeGiftCard: () => void;
 
     // Local Helpers
     getTotalItems: () => number;
+    getSubtotal: () => number;
     getTotalPrice: () => number;
 }
 
@@ -40,6 +55,9 @@ export const useCartStore = create<CartState>()(
             items: [],
             isLoading: false,
             error: null,
+            coupon: null,
+            giftCard: null,
+            shippingFee: 50,
 
             fetchCart: async () => {
                 set({ isLoading: true });
@@ -83,18 +101,73 @@ export const useCartStore = create<CartState>()(
             clearCart: async () => {
                 try {
                     await api.delete("/cart");
-                    set({ items: [] });
+                    set({ items: [], coupon: null, giftCard: null });
                 } catch (err: any) {
                     console.error("Failed to clear cart:", err);
                 }
             },
 
+            applyCoupon: async (code) => {
+                set({ isLoading: true });
+                try {
+                    const cartTotal = get().getSubtotal();
+                    const response = await api.post("/coupons/validate", { code, cartTotal });
+                    set({
+                        coupon: {
+                            code: response.data.code,
+                            discountAmount: response.data.discountAmount
+                        },
+                        error: null
+                    });
+                } catch (err: any) {
+                    set({ error: err.response?.data?.message || "Invalid coupon" });
+                    throw err;
+                } finally {
+                    set({ isLoading: false });
+                }
+            },
+
+            applyGiftCard: async (code) => {
+                set({ isLoading: true });
+                try {
+                    const response = await api.post("/gift-cards/check", { code });
+                    const balance = response.data.balance;
+                    const subtotal = get().getSubtotal();
+                    const afterCoupon = subtotal - (get().coupon?.discountAmount || 0);
+                    const appliedAmount = Math.min(balance, afterCoupon);
+
+                    set({
+                        giftCard: {
+                            code: response.data.code,
+                            balance,
+                            appliedAmount
+                        },
+                        error: null
+                    });
+                } catch (err: any) {
+                    set({ error: err.response?.data?.message || "Invalid gift card" });
+                    throw err;
+                } finally {
+                    set({ isLoading: false });
+                }
+            },
+
+            removeCoupon: () => set({ coupon: null }),
+            removeGiftCard: () => set({ giftCard: null }),
+
             getTotalItems: () => {
                 return get().items.reduce((total, item) => total + item.quantity, 0);
             },
 
-            getTotalPrice: () => {
+            getSubtotal: () => {
                 return get().items.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+            },
+
+            getTotalPrice: () => {
+                const subtotal = get().getSubtotal();
+                const discount = get().coupon?.discountAmount || 0;
+                const giftCardApplied = get().giftCard?.appliedAmount || 0;
+                return Math.max(0, subtotal - discount - giftCardApplied + get().shippingFee);
             },
         }),
         {

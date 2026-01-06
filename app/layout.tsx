@@ -40,6 +40,27 @@ export const metadata: Metadata = {
     shortcut: "/logo-Photoroom.png",
     apple: "/logo-Photoroom.png",
   },
+  openGraph: {
+    title: "SPECTRA | Luxury Tech E-commerce",
+    description: "Next-generation digital commerce experience forged with liquid metal aesthetics.",
+    url: "https://spectra.com",
+    siteName: "SPECTRA",
+    images: [
+      {
+        url: "/logo-Photoroom.png",
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SPECTRA | Luxury Tech E-commerce",
+    description: "Next-generation digital commerce experience forged with liquid metal aesthetics.",
+    images: ["/logo-Photoroom.png"],
+  },
 };
 
 export default function RootLayout({

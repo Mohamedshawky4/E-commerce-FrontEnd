@@ -13,7 +13,7 @@ import { toast } from "sonner";
 
 const CheckoutPage = () => {
     const router = useRouter();
-    const { items, getTotalPrice, clearCart } = useCartStore();
+    const { items, getTotalPrice, getSubtotal, clearCart, coupon, giftCard } = useCartStore();
     const [isLoading, setIsLoading] = useState(false);
     const [mounted, setMounted] = useState(false);
 
@@ -48,7 +48,10 @@ const CheckoutPage = () => {
                 })),
                 shippingAddress: shippingData,
                 paymentMethod: method === "cod" ? "COD" : "Online",
+                couponCode: coupon?.code,
+                giftCardCode: giftCard?.code,
             });
+
 
             const orderId = orderResponse.data.order._id;
 
@@ -164,11 +167,32 @@ const CheckoutPage = () => {
                             ))}
                         </div>
 
-                        <div className="space-y-4 pt-10 border-t border-white/10">
-                            <div className="flex justify-between items-center">
-                                <span className="text-xs font-black text-foreground/40 uppercase tracking-widest">Total Valuation</span>
-                                <span className="text-4xl font-black text-primary text-glow">${(getTotalPrice() + 50).toFixed(2)}</span>
+                        <div className="space-y-4 pt-4 border-t border-white/10">
+                            <div className="flex justify-between text-xs font-black tracking-widest text-foreground/40 uppercase">
+                                <span>Subtotal</span>
+                                <span>${getSubtotal().toFixed(2)}</span>
                             </div>
+                            {coupon && (
+                                <div className="flex justify-between text-xs font-black tracking-widest text-primary uppercase">
+                                    <span>Coupon ({coupon.code})</span>
+                                    <span>-${coupon.discountAmount.toFixed(2)}</span>
+                                </div>
+                            )}
+                            {giftCard && (
+                                <div className="flex justify-between text-xs font-black tracking-widest text-primary uppercase">
+                                    <span>Gift Card ({giftCard.code})</span>
+                                    <span>-${giftCard.appliedAmount.toFixed(2)}</span>
+                                </div>
+                            )}
+                            <div className="flex justify-between text-xs font-black tracking-widest text-foreground/40 uppercase">
+                                <span>Shipment Fee</span>
+                                <span>$50.00</span>
+                            </div>
+                            <div className="flex justify-between items-center pt-4 border-t border-white/5">
+                                <span className="text-xs font-black text-foreground/40 uppercase tracking-widest">Total Valuation</span>
+                                <span className="text-4xl font-black text-primary text-glow">${getTotalPrice().toFixed(2)}</span>
+                            </div>
+
                             <Button
                                 onClick={handlePlaceOrder}
                                 variant="liquid"
