@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useSpring, useMotionValue } from "framer-motion";
+import { m, useSpring, useMotionValue } from "framer-motion";
 
 const LiquidCore = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -35,13 +35,13 @@ const LiquidCore = () => {
             className="w-full h-full relative group flex items-center justify-center perspective-1000"
         >
             {/* Background Glow */}
-            <motion.div
+            <m.div
                 style={{ x: springX, y: springY, scale: 1.2 }}
                 className="absolute inset-0 bg-primary/20 blur-[120px] rounded-full opacity-50 transition-opacity group-hover:opacity-80"
             />
 
             {/* Main Luxury Asset */}
-            <motion.div
+            <m.div
                 style={{
                     x: springX,
                     y: springY,
@@ -71,10 +71,10 @@ const LiquidCore = () => {
 
                 {/* Glass Glare Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
-            </motion.div>
+            </m.div>
 
             {/* Kinetic Secondary Ring */}
-            <motion.div
+            <m.div
                 style={{
                     x: useSpring(x, { ...springConfig, stiffness: 50 }),
                     y: useSpring(y, { ...springConfig, stiffness: 50 }),

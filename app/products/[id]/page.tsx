@@ -8,7 +8,8 @@ import Button from '@/components/Button';
 import { Star, Truck, ShieldCheck, Heart, ShoppingCart, Maximize2, X, Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 const ProductPage = () => {
@@ -95,7 +96,9 @@ const ProductPage = () => {
             )}
             <button
               onClick={(e) => { e.stopPropagation(); /* Handle wishlist */ }}
+              aria-label="Add to wishlist"
               className="absolute top-6 right-6 p-4 rounded-2xl glass-card text-foreground/50 hover:text-rose-500 transition-colors z-20"
+
             >
               <Heart size={24} />
             </button>
@@ -103,7 +106,7 @@ const ProductPage = () => {
 
           <AnimatePresence>
             {isFullScreen && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -113,13 +116,15 @@ const ProductPage = () => {
                 <div className="absolute top-8 right-8 z-[110]">
                   <button
                     onClick={() => setIsFullScreen(false)}
+                    aria-label="Close full screen view"
                     className="p-4 rounded-2xl glass-card text-foreground/50 hover:text-primary transition-all hover:rotate-90"
+
                   >
                     <X size={32} />
                   </button>
                 </div>
 
-                <motion.div
+                <m.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
@@ -134,8 +139,8 @@ const ProductPage = () => {
                     className="object-contain"
                     priority
                   />
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             )}
           </AnimatePresence>
 
@@ -235,14 +240,18 @@ const ProductPage = () => {
                 <div className="flex items-center glass-card rounded-2xl p-1">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    aria-label="Decrease quantity"
                     className="p-3 hover:text-primary transition-colors hover:bg-white/5 rounded-xl"
+
                   >
                     <Minus size={20} />
                   </button>
                   <span className="w-12 text-center font-black text-xl">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
+                    aria-label="Increase quantity"
                     className="p-3 hover:text-primary transition-colors hover:bg-white/5 rounded-xl"
+
                   >
                     <Plus size={20} />
                   </button>

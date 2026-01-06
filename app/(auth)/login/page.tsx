@@ -1,5 +1,6 @@
 "use client";
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
+
 // import Footer from '@/components/Footer'
 import AuthForm from '@/components/AuthForm'
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -10,8 +11,8 @@ import ThemeToggle from '@/components/ThemeToggle';
 const Page = () => {
   const router = useRouter();
   //check if the token exists in local storage and navigate to home page if it does
-  const { token , initialized } = useAuthStore();
-  
+  const { token, initialized } = useAuthStore();
+
   useEffect(() => {
     if (initialized && token) {
       console.log(token)
@@ -20,15 +21,15 @@ const Page = () => {
   }, [initialized, token, router]);
   return (
     <>
-      
-      
+
+
       {/* Enhanced Background with Gradient and Patterns */}
       <div className="relative min-h-screen bg-linear-to-br from-background via-background/95 to-background/70 overflow-hidden">
-      
+
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           {/* Gradient Orbs */}
-          <motion.div
+          <m.div
             className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full filter blur-3xl"
             animate={{
               x: [0, 100, 0],
@@ -41,7 +42,7 @@ const Page = () => {
               ease: "easeInOut"
             }}
           />
-          <motion.div
+          <m.div
             className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full filter blur-3xl"
             animate={{
               x: [0, -80, 0],
@@ -54,7 +55,7 @@ const Page = () => {
               ease: "easeInOut"
             }}
           />
-          <motion.div
+          <m.div
             className="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"
             animate={{
               x: [-50, 50, -50],
@@ -68,16 +69,16 @@ const Page = () => {
             }}
           />
         </div>
-        
+
 
         {/* Main Content */}
         <div className="relative z-10 pt-16 pb-0">
           <div className="absolute top-5 left-8 ">
-        <ThemeToggle />
-      </div>
+            <ThemeToggle />
+          </div>
           <div className="container mx-auto px-4">
             {/* Hero Section */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -86,23 +87,23 @@ const Page = () => {
               <h1 className="text-4xl md:text-5xl font-bold mb-4  bg-clip-text text-transparent text-gradient">
                 Welcome to Our Store
               </h1>
-            </motion.div>
+            </m.div>
 
             {/* Auth Form Section */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex justify-center items-center"
             >
               <AuthForm />
-            </motion.div>
+            </m.div>
 
-           
+
           </div>
         </div>
       </div>
-      
+
     </>
   )
 }

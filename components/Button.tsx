@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import clsx from "clsx";
-import { motion, HTMLMotionProps } from "framer-motion";
+import { m, HTMLMotionProps } from "framer-motion";
+
 import { Loader2 } from "lucide-react";
 
 type ButtonVariant = "primary" | "outline" | "ghost" | "danger" | "success" | "secondary" | "metal" | "liquid";
@@ -62,7 +63,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <motion.button
+      <m.button
         whileHover={!disabled && !isLoading ? { scale: 1.01 } : {}}
         whileTap={!disabled && !isLoading ? { scale: 0.98 } : {}}
         ref={ref as any}
@@ -88,7 +89,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           )}
         </span>
         {variant === "liquid" && (
-          <motion.div
+          <m.div
             className="absolute inset-0 opacity-20"
             animate={{
               background: [
@@ -102,7 +103,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
           />
         )}
-      </motion.button>
+      </m.button>
     );
   }
 );

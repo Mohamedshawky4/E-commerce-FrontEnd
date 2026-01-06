@@ -6,10 +6,21 @@ const LazyBackground = () => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        // Only mount background effects after the initial client paint
-        const timer = setTimeout(() => setMounted(true), 100);
+        // Significantly defer background to prioritize LCP and main content
+        const mountBackground = () => setMounted(true);
+
+        let timer: any;
+        if ('requestIdleCallback' in window) {
+            (window as any).requestIdleCallback(() => {
+                timer = setTimeout(mountBackground, 800);
+            });
+        } else {
+            timer = setTimeout(mountBackground, 1500);
+        }
+
         return () => clearTimeout(timer);
     }, []);
+
 
     if (!mounted) return null;
 

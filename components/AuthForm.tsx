@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import ToggleButton from "./ToggleButton";
 import Input from "./Input";
 import Button from "./Button";
@@ -220,14 +220,14 @@ const AuthForm: React.FC = () => {
 
 
     return (
-        <motion.div
+        <m.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="w-full max-w-md mx-auto"
         >
             {/* Toggle Button - Stays outside AnimatePresence for stability */}
-            <motion.div
+            <m.div
                 variants={itemVariants}
                 className="flex justify-center mb-5"
             >
@@ -240,12 +240,12 @@ const AuthForm: React.FC = () => {
                     {/* Subtle glow effect behind toggle */}
                     <div className="absolute inset-0 bg-primary/60 rounded-full blur-xl scale-110 opacity-30 -z-10 pointer-events-none" />
                 </div>
-            </motion.div>
+            </m.div>
 
             {/* Form Container with Glass Effect and Animations */}
             <div className="relative overflow-hidden">
                 <AnimatePresence mode="wait">
-                    <motion.form
+                    <m.form
                         key={isLogin ? "login" : "register"}
                         variants={formVariants}
                         initial="hidden"
@@ -259,7 +259,7 @@ const AuthForm: React.FC = () => {
                         className="relative space-y-6 glass-card py-10 px-10 border-white/10 overflow-hidden"
                     >
                         {/* Title */}
-                        <motion.div
+                        <m.div
                             variants={itemVariants}
                             className="text-center relative z-10"
                         >
@@ -267,12 +267,12 @@ const AuthForm: React.FC = () => {
                                 {isLogin ? "IDENTITY ACCESS" : "CREATE NEXUS"}
                             </h2>
                             <div className="w-12 h-1 bg-primary mx-auto mt-2 rounded-full opacity-50" />
-                        </motion.div>
+                        </m.div>
 
                         {/* Form Fields */}
                         <div className="space-y-6 relative z-10">
                             {!isLogin && (
-                                <motion.div
+                                <m.div
                                     variants={itemVariants}
                                     initial="hidden"
                                     animate="visible"
@@ -290,10 +290,10 @@ const AuthForm: React.FC = () => {
                                     {errors.name && (
                                         <p className="text-red-500 text-[10px] font-bold tracking-widest mt-1 uppercase">{errors.name}</p>
                                     )}
-                                </motion.div>
+                                </m.div>
                             )}
 
-                            <motion.div variants={itemVariants}>
+                            <m.div variants={itemVariants}>
                                 <Input
                                     label="Email Vector"
                                     name="email"
@@ -306,9 +306,9 @@ const AuthForm: React.FC = () => {
                                 {errors.email && (
                                     <p className="text-red-500 text-[10px] font-bold tracking-widest mt-1 uppercase">{errors.email}</p>
                                 )}
-                            </motion.div>
+                            </m.div>
 
-                            <motion.div variants={itemVariants}>
+                            <m.div variants={itemVariants}>
                                 <Input
                                     label="Security Key"
                                     name="password"
@@ -321,10 +321,10 @@ const AuthForm: React.FC = () => {
                                 {errors.password && (
                                     <p className="text-red-500 text-[10px] font-bold tracking-widest mt-1 uppercase">{errors.password}</p>
                                 )}
-                            </motion.div>
+                            </m.div>
 
                             {!isLogin && (
-                                <motion.div
+                                <m.div
                                     variants={itemVariants}
                                     initial="hidden"
                                     animate="visible"
@@ -342,24 +342,24 @@ const AuthForm: React.FC = () => {
                                     {errors.confirmPassword && (
                                         <p className="text-red-500 text-[10px] font-bold tracking-widest mt-1 uppercase">{errors.confirmPassword}</p>
                                     )}
-                                </motion.div>
+                                </m.div>
                             )}
                         </div>
 
                         {/* Forgot Password Link */}
                         {isLogin && (
-                            <motion.div variants={itemVariants} className="text-right">
+                            <m.div variants={itemVariants} className="text-right">
                                 <Link
                                     href="/forgot-password"
                                     className="text-[10px] font-black tracking-widest uppercase text-primary/60 hover:text-primary transition-colors"
                                 >
                                     Lost Access?
                                 </Link>
-                            </motion.div>
+                            </m.div>
                         )}
 
                         {/* Submit Button */}
-                        <motion.div variants={itemVariants} className="relative z-10">
+                        <m.div variants={itemVariants} className="relative z-10">
                             <Button
                                 type="submit"
                                 variant="liquid"
@@ -370,20 +370,20 @@ const AuthForm: React.FC = () => {
                             >
                                 {isLogin ? "INITIALIZE" : "REGISTER"}
                             </Button>
-                        </motion.div>
+                        </m.div>
 
                         {/* Divider */}
                         {isLogin && (
-                            <motion.div variants={itemVariants} className="relative flex items-center justify-center gap-4 text-[10px] font-black tracking-[0.3em] text-white/20 uppercase">
+                            <m.div variants={itemVariants} className="relative flex items-center justify-center gap-4 text-[10px] font-black tracking-[0.3em] text-white/20 uppercase">
                                 <span className="flex-1 h-px bg-white/10" />
                                 <span>OR</span>
                                 <span className="flex-1 h-px bg-white/10" />
-                            </motion.div>
+                            </m.div>
                         )}
 
                         {/* Google Sign In */}
                         {isLogin && (
-                            <motion.div variants={itemVariants} className="relative z-10">
+                            <m.div variants={itemVariants} className="relative z-10">
                                 <Button
                                     type="button"
                                     variant="metal"
@@ -403,13 +403,13 @@ const AuthForm: React.FC = () => {
                                 >
                                     <span className="font-black tracking-[0.2em]">NODE.GOOGLE</span>
                                 </Button>
-                            </motion.div>
+                            </m.div>
                         )}
 
-                    </motion.form>
+                    </m.form>
                 </AnimatePresence>
             </div>
-        </motion.div>
+        </m.div>
     );
 };
 

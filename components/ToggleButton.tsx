@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface ToggleButtonProps {
   arrayOfLabels?: [string, string];
@@ -32,7 +32,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
                   border border-primary/40 shadow-md glass-effect hover:shadow-lg transition-all duration-300 group bg-background/20"
     >
       {/* Sliding Highlight */}
-      <motion.div
+      <m.div
         layout
         transition={{ type: "spring", stiffness: 400, damping: 30 }}
         className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full 

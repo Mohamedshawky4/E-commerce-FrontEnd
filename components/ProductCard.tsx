@@ -37,7 +37,9 @@ const ProductCard = ({ product }: { product: Product }) => {
                     fill
                     onError={() => setError(true)}
                     className="object-cover transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-80"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 20vw"
                 />
+
 
                 {/* Discount Badge */}
                 {product.discountPercent && (
@@ -52,6 +54,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                         e.preventDefault();
                         toggleWishlist(product as any);
                     }}
+                    aria-label={isFav ? "Remove from wishlist" : "Add to wishlist"}
                     className={`absolute right-4 top-4 rounded-xl glass-card p-2 transition-all duration-300 z-20 ${isFav
                         ? "text-rose-500 opacity-100 border-rose-500/30 bg-rose-500/10 shadow-[0_0_15px_rgba(244,63,94,0.3)]"
                         : "text-foreground/50 opacity-0 group-hover:opacity-100 hover:text-rose-500 hover:border-rose-500/50"

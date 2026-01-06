@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
+
 import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from "lucide-react";
 import Button from "@/components/Button";
 import { useCartStore } from "@/stores/cartStore";
@@ -19,7 +20,7 @@ const CartPage = () => {
     if (isLoading && items.length === 0) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <motion.div
+                <m.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full"
@@ -30,7 +31,7 @@ const CartPage = () => {
 
     return (
         <div className="container mx-auto px-4 pt-8 pb-0 ">
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="mb-12"
@@ -39,10 +40,10 @@ const CartPage = () => {
                     Your Cargo
                 </h1>
                 <div className="w-20 h-1.5 bg-primary mt-4 rounded-full opacity-60 shadow-[0_0_15px_rgba(0,242,254,0.5)]" />
-            </motion.div>
+            </m.div>
 
             {items.length === 0 ? (
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="glass-card p-20 text-center space-y-8"
@@ -59,14 +60,14 @@ const CartPage = () => {
                             BROWSE NEXUS
                         </Button>
                     </Link>
-                </motion.div>
+                </m.div>
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     {/* Cart Items List */}
                     <div className="lg:col-span-2 space-y-6">
                         <AnimatePresence mode="popLayout">
                             {items.map((item, index) => (
-                                <motion.div
+                                <m.div
                                     key={item._id || item.product._id || index}
                                     layout
                                     initial={{ opacity: 0, y: 20 }}
@@ -137,14 +138,14 @@ const CartPage = () => {
                                     >
                                         <Trash2 size={18} />
                                     </button>
-                                </motion.div>
+                                </m.div>
                             ))}
                         </AnimatePresence>
                     </div>
 
                     {/* Order Summary */}
                     <div className="lg:col-span-1">
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="glass-card p-10 space-y-8 sticky top-28"
@@ -188,7 +189,7 @@ const CartPage = () => {
                                     <div className="w-8 h-5 bg-white rounded-sm" />
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
                     </div>
                 </div>
             )}

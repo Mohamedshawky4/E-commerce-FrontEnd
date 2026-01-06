@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Button from "../Button";
 import Input from "../Input";
 import { toast } from "sonner";
@@ -27,16 +27,16 @@ const Newsletter = () => {
                     {/* Background Glow */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -z-10" />
 
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 0.8, scale: 1 }}
                         viewport={{ once: true }}
                         className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-3xl glass-card border-primary/20 text-primary"
                     >
                         <Mail size={36} className="text-glow" />
-                    </motion.div>
+                    </m.div>
 
-                    <motion.h2
+                    <m.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -44,9 +44,9 @@ const Newsletter = () => {
                         className="text-4xl md:text-6xl font-black text-metal tracking-tighter mb-6"
                     >
                         JOIN THE <span className="text-primary text-glow">NEXUS</span>
-                    </motion.h2>
+                    </m.h2>
 
-                    <motion.p
+                    <m.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -54,9 +54,9 @@ const Newsletter = () => {
                         className="text-text-muted mb-10 text-lg md:text-xl font-medium max-w-xl mx-auto leading-relaxed"
                     >
                         Authorize your communication vector to receive priority access to future drops and limited cyber-tier editions.
-                    </motion.p>
+                    </m.p>
 
-                    <motion.form
+                    <m.form
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -82,7 +82,7 @@ const Newsletter = () => {
                         >
                             AUTHORIZE
                         </Button>
-                    </motion.form>
+                    </m.form>
                 </div>
             </div>
         </section>

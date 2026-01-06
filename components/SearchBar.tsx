@@ -73,14 +73,18 @@ const SearchBar = () => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="SEARCH COLLECTIONS..."
+                    aria-label="Search products"
                     className="w-full bg-foreground/5 border border-white/5 rounded-2xl py-3 pl-12 pr-10 text-sm tracking-widest focus:outline-none focus:border-primary/30 focus:bg-foreground/10 transition-all duration-300 placeholder:text-foreground/30"
+
                     onFocus={() => query.length > 1 && setShowSuggestions(true)}
                 />
                 {query && (
                     <button
                         type="button"
                         onClick={() => setQuery('')}
+                        aria-label="Clear search"
                         className="absolute right-4 text-foreground/30 hover:text-foreground transition-colors"
+
                     >
                         <X size={16} />
                     </button>

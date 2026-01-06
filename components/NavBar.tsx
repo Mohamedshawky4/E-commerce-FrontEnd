@@ -85,7 +85,9 @@ const NavBar = () => {
           {/* Wishlist */}
           <Link
             href="/wishlist"
+            aria-label="Wishlist"
             className="relative p-2.5 rounded-xl border border-border/5 hover:border-border/20 transition-all hover:bg-foreground/5"
+
           >
             <Heart size={20} className="text-foreground/80" />
             {mounted && items.length > 0 && (
@@ -98,7 +100,9 @@ const NavBar = () => {
           {/* Cart Icon */}
           <Link
             href="/cart"
+            aria-label="Shopping Cart"
             className="relative p-2.5 rounded-xl border border-border/5 hover:border-border/20 transition-all hover:bg-foreground/5"
+
           >
             <ShoppingCart size={20} className="text-foreground/80" />
             {mounted && cartItemCount > 0 && (
@@ -125,18 +129,20 @@ const NavBar = () => {
 
           {/* Hamburger Menu */}
           <div className="md:hidden">
-            <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(true)}>
+            <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(true)} aria-label="Open menu">
               <Menu size={24} />
             </Button>
           </div>
+
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div className={`absolute top-0 left-0 w-full h-screen glass-card rounded-none flex flex-col items-center justify-center gap-10 transition-all duration-500 z-[100] ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
-        <Button variant="ghost" className="absolute top-6 right-6" onClick={() => setIsMenuOpen(false)}>
+        <Button variant="ghost" className="absolute top-6 right-6" onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
           <X size={32} />
         </Button>
+
         {navLinks.map((link) => (
           <Link
             key={link.name}

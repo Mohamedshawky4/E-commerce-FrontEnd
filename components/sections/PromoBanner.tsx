@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Button from "../Button";
 import Link from "next/link";
 
@@ -16,16 +16,16 @@ const PromoBanner = () => {
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
-                    <motion.span
+                    <m.span
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         className="text-sm font-bold tracking-widest text-primary uppercase"
                     >
                         Limited Time Offer
-                    </motion.span>
+                    </m.span>
 
-                    <motion.h2
+                    <m.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -33,9 +33,9 @@ const PromoBanner = () => {
                         className="text-4xl md:text-5xl font-bold text-foreground"
                     >
                         Summer Collection Sale
-                    </motion.h2>
+                    </m.h2>
 
-                    <motion.p
+                    <m.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -43,9 +43,9 @@ const PromoBanner = () => {
                         className="text-lg text-muted-foreground"
                     >
                         Get up to 50% off on our exclusive summer arrivals. Upgrade your wardrobe with the latest trends.
-                    </motion.p>
+                    </m.p>
 
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -56,7 +56,7 @@ const PromoBanner = () => {
                                 Shop Now
                             </Button>
                         </Link>
-                    </motion.div>
+                    </m.div>
                 </div>
             </div>
         </section>

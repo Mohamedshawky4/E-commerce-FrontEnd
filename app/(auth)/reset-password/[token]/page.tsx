@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
@@ -46,7 +46,7 @@ const ResetPasswordPage = () => {
                 <ThemeToggle />
             </div>
 
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-md"
@@ -94,13 +94,13 @@ const ResetPasswordPage = () => {
                             </Button>
                         </form>
                     ) : (
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="text-center space-y-6 relative z-10"
                         >
                             <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto border border-green-500/50">
-                                <motion.div
+                                <m.div
                                     animate={{ scale: [1, 1.2, 1] }}
                                     className="w-8 h-8 bg-green-500 rounded-full blur-sm"
                                 />
@@ -111,10 +111,10 @@ const ResetPasswordPage = () => {
                             <p className="text-xs text-foreground/60 leading-relaxed">
                                 Your security key has been updated. Redirecting to nexus access...
                             </p>
-                        </motion.div>
+                        </m.div>
                     )}
                 </div>
-            </motion.div>
+            </m.div>
         </div>
     );
 };

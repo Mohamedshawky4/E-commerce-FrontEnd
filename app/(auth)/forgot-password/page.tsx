@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import api from "@/lib/axios";
@@ -33,7 +33,7 @@ const ForgotPasswordPage = () => {
         <div className="relative min-h-screen bg-linear-to-br from-background via-background/95 to-background/70 overflow-hidden flex items-center justify-center py-20 px-4">
             {/* Background elements (mirroring login page) */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <motion.div
+                <m.div
                     className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full filter blur-3xl"
                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
                     transition={{ duration: 10, repeat: Infinity }}
@@ -44,7 +44,7 @@ const ForgotPasswordPage = () => {
                 <ThemeToggle />
             </div>
 
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-md"
@@ -84,13 +84,13 @@ const ForgotPasswordPage = () => {
                             </Button>
                         </form>
                     ) : (
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="text-center space-y-6 relative z-10"
                         >
                             <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto border border-primary/50">
-                                <motion.div
+                                <m.div
                                     animate={{ scale: [1, 1.2, 1] }}
                                     transition={{ duration: 2, repeat: Infinity }}
                                     className="w-8 h-8 bg-primary rounded-full blur-sm"
@@ -102,7 +102,7 @@ const ForgotPasswordPage = () => {
                             <p className="text-xs text-foreground/60 leading-relaxed">
                                 Check your email inbox for the recalibration sequence. The link expires in 10 minutes.
                             </p>
-                        </motion.div>
+                        </m.div>
                     )}
 
                     <div className="text-center relative z-10 pt-4">
@@ -111,7 +111,7 @@ const ForgotPasswordPage = () => {
                         </Link>
                     </div>
                 </div>
-            </motion.div>
+            </m.div>
         </div>
     );
 };

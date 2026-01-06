@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
+
 import { CreditCard, Truck, ShieldCheck, Wallet, ArrowLeft } from "lucide-react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -81,20 +82,20 @@ const CheckoutPage = () => {
 
     return (
         <div className="container mx-auto px-4 py-12 ">
-            <motion.button
+            <m.button
                 onClick={() => router.back()}
                 className="mb-8 flex items-center gap-2 text-[10px] font-black tracking-widest text-foreground/40 hover:text-primary transition-all uppercase"
             >
                 <ArrowLeft size={14} /> Back to Nexus
-            </motion.button>
+            </m.button>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 {/* Information Flow */}
                 <div className="space-y-12">
-                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                    <m.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
                         <h1 className="text-4xl font-black text-metal tracking-tighter uppercase mb-2">Checkout Node</h1>
                         <p className="text-[10px] font-black text-foreground/30 tracking-[0.3em] uppercase">Phase 3: Final Authorization</p>
-                    </motion.div>
+                    </m.div>
 
                     {/* Shipping Section */}
                     <div className="space-y-6">
@@ -146,8 +147,9 @@ const CheckoutPage = () => {
 
                         <div className="space-y-6 max-h-[400px] overflow-y-auto pr-4 scrollbar-hide">
                             <h3 className="text-[10px] font-black tracking-[0.3em] uppercase text-foreground/40">Manifest Items</h3>
-                            {items.map((item) => (
-                                <div key={item._id} className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
+                            {items.map((item, index) => (
+                                <div key={item._id || `${item.product._id}-${item.variantId || index}`} className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
+
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 relative rounded-lg overflow-hidden border border-white/10">
                                             <Image src={(item.product.images && item.product.images[0]) || "/images/product.jpg"} alt={item.product.name} fill className="object-cover" />
