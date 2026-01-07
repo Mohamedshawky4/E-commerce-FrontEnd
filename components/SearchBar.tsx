@@ -6,36 +6,33 @@ import Image from 'next/image';
 import api from '@/lib/axios';
 import { Product } from '@/types/product';
 
+import { useSearchSuggestions } from '@/hooks/useProducts';
+
 const SearchBar = () => {
     const [query, setQuery] = useState('');
-    const [suggestions, setSuggestions] = useState<Product[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [debouncedQuery, setDebouncedQuery] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
     const router = useRouter();
     const searchRef = useRef<HTMLDivElement>(null);
 
-    // Debounce search
+    // Debounce search query
     useEffect(() => {
-        const timer = setTimeout(async () => {
-            if (query.trim().length > 1) {
-                setIsLoading(true);
-                try {
-                    const { data } = await api.get(`/products/suggestions?q=${query}`);
-                    setSuggestions(data.products || []);
-                    setShowSuggestions(true);
-                } catch (error) {
-                    console.error('Search error:', error);
-                } finally {
-                    setIsLoading(false);
-                }
-            } else {
-                setSuggestions([]);
-                setShowSuggestions(false);
-            }
+        const timer = setTimeout(() => {
+            setDebouncedQuery(query);
         }, 300);
-
         return () => clearTimeout(timer);
     }, [query]);
+
+    const { data: suggestions = [], isLoading } = useSearchSuggestions(debouncedQuery);
+
+    // Show suggestions when data arrives or loading starts
+    useEffect(() => {
+        if (debouncedQuery.trim().length > 1) {
+            setShowSuggestions(true);
+        } else {
+            setShowSuggestions(false);
+        }
+    }, [debouncedQuery, suggestions]);
 
     // Close suggestions on click outside
     useEffect(() => {

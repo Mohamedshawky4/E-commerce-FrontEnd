@@ -6,7 +6,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import AuthInitializer from "@/components/AuthInitializer";
-import ClientLayout from "@/components/ClientLayout"; // 👈 new wrapper
+import ClientLayout from "@/components/ClientLayout";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,9 +72,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} ${inter.variable} antialiased`}>
-        <AuthInitializer>
-          <ClientLayout>{children}</ClientLayout>
-        </AuthInitializer>
+        <QueryProvider>
+          <AuthInitializer>
+            <ClientLayout>{children}</ClientLayout>
+          </AuthInitializer>
+        </QueryProvider>
       </body>
     </html>
   );

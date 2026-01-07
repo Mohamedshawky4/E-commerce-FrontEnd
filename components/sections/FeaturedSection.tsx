@@ -10,6 +10,8 @@ import ProductCardSkeleton from "../ProductCardSkeleton";
 
 import { Product } from "@/types/product";
 
+import { useFeaturedProducts } from "@/hooks/useProducts";
+
 interface ProductSectionProps {
     title: string;
     endpoint?: string;
@@ -25,31 +27,14 @@ const ProductSection: React.FC<ProductSectionProps> = ({
     linkHref,
     autoplay = true,
 }) => {
-    const [products, setProducts] = useState<Product[]>(initialProducts || []);
-    const [loading, setLoading] = useState(!initialProducts?.length);
-
     // Create a unique ID for navigation classes
     const sectionId = title.toLowerCase().replace(/\s+/g, '-');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!endpoint) return;
-            try {
-                const response = await api.get(endpoint);
-                const data = response.data;
-                const fetchedProducts = data.products || data.relatedProducts || [];
-                setProducts(fetchedProducts);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const { data: fetchedProducts, isLoading } = useFeaturedProducts(endpoint || "");
 
-        if (!initialProducts?.length) {
-            fetchData();
-        }
-    }, [endpoint, initialProducts]);
+    // Use initialProducts if provided, otherwise use fetched data
+    const products: Product[] = initialProducts || fetchedProducts || [];
+    const loading = !initialProducts?.length && isLoading;
 
     return (
         <section className="py-16 w-full flex flex-col items-center overflow-hidden">

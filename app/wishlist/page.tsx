@@ -3,26 +3,25 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Heart, ShoppingBag, Trash2 } from "lucide-react";
-import { useWishlistStore } from "@/stores/wishlistStore";
+import { useWishlist, useClearWishlist } from "@/hooks/useWishlist";
 import ProductCard from "@/components/ProductCard";
 import Button from "@/components/Button";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
 
 const WishlistPage = () => {
-    const { items, isLoading, fetchWishlist, clearWishlist } = useWishlistStore();
+    const { data: items = [], isLoading } = useWishlist();
+    const { mutate: clearWishlist } = useClearWishlist();
     const { token } = useAuthStore();
     const router = useRouter();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
-        if (!token) {
+        if (mounted && !token) {
             router.push("/login?redirect=/wishlist");
-        } else {
-            fetchWishlist();
         }
-    }, [token, fetchWishlist, router]);
+    }, [token, mounted, router]);
 
     if (!mounted || !token) return null;
 
@@ -48,7 +47,7 @@ const WishlistPage = () => {
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={clearWishlist}
+                            onClick={() => clearWishlist()}
                             leftIcon={<Trash2 size={14} />}
                             className="text-[10px] font-black tracking-widest border-white/5 hover:border-rose-500/50 hover:text-rose-500 transition-all"
                         >

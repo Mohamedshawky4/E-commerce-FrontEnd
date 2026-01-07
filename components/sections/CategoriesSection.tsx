@@ -1,29 +1,12 @@
 "use client";
-import api from '@/lib/axios';
-import React, { useEffect } from 'react';
+import React from 'react';
 import CategoryCard from '../CategoryCard';
 import CategoryCardSkeleton from '../CategoryCardSkeleton';
-import { Category } from '@/types/category';
 import Link from 'next/link';
+import { useCategories } from '@/hooks/useCategories';
 
 const CategoriesSection = () => {
-  const [categories, setCategories] = React.useState<Category[]>([]);
-  const [loading, setLoading] = React.useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/categories');
-        const categories = response.data.categories;
-        setCategories(categories);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const { data: categories = [], isLoading: loading } = useCategories();
 
   return (
     <section id="categories-section" className="py-12 px-0 flex flex-col items-center w-full">

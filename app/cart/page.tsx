@@ -8,10 +8,16 @@ import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, X } from "lucide-react";
 import Button from "@/components/Button";
 import { useCartStore } from "@/stores/cartStore";
 
+import { useCart, useUpdateCartQuantity, useRemoveFromCart, useClearCart } from "@/hooks/useCart";
+
 const CartPage = () => {
+    const { data: cartData, isLoading } = useCart();
+    const items = cartData?.items || [];
+    const { mutate: updateQuantity } = useUpdateCartQuantity();
+    const { mutate: removeItem } = useRemoveFromCart();
     const {
-        items, fetchCart, updateQuantity, removeItem, getSubtotal, getTotalPrice,
-        isLoading, coupon, giftCard, applyCoupon, applyGiftCard, removeCoupon, removeGiftCard
+        getSubtotal, getTotalPrice,
+        coupon, giftCard, applyCoupon, applyGiftCard, removeCoupon, removeGiftCard
     } = useCartStore();
     const [mounted, setMounted] = useState(false);
     const [promoCode, setPromoCode] = useState("");
@@ -20,8 +26,7 @@ const CartPage = () => {
 
     useEffect(() => {
         setMounted(true);
-        fetchCart();
-    }, [fetchCart]);
+    }, []);
 
     if (isLoading && items.length === 0) {
         return (
@@ -123,7 +128,7 @@ const CartPage = () => {
 
                                     <div className="flex items-center gap-4 py-2 px-4 rounded-xl bg-foreground/5 border border-white/5">
                                         <button
-                                            onClick={() => updateQuantity(item.product._id, Math.max(1, item.quantity - 1), item.variantId)}
+                                            onClick={() => updateQuantity({ productId: item.product._id, quantity: Math.max(1, item.quantity - 1), variantId: item.variantId })}
                                             className="hover:text-primary transition-colors disabled:opacity-20"
                                             disabled={item.quantity <= 1}
                                         >
@@ -131,7 +136,7 @@ const CartPage = () => {
                                         </button>
                                         <span className="text-xs font-black min-w-[20px] text-center">{item.quantity}</span>
                                         <button
-                                            onClick={() => updateQuantity(item.product._id, item.quantity + 1, item.variantId)}
+                                            onClick={() => updateQuantity({ productId: item.product._id, quantity: item.quantity + 1, variantId: item.variantId })}
                                             className="hover:text-primary transition-colors"
                                         >
                                             <Plus size={14} />
@@ -139,7 +144,7 @@ const CartPage = () => {
                                     </div>
 
                                     <button
-                                        onClick={() => removeItem(item.product._id, item.variantId)}
+                                        onClick={() => removeItem({ productId: item.product._id, variantId: item.variantId })}
                                         className="p-3 rounded-xl hover:bg-rose-500/10 hover:text-rose-500 transition-all text-foreground/30"
                                     >
                                         <Trash2 size={18} />

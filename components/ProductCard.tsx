@@ -4,16 +4,17 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { Heart, Star, ShoppingCart } from "lucide-react";
 import Button from "./Button";
-import { useCartStore } from "@/stores/cartStore";
-import { useWishlistStore } from "@/stores/wishlistStore";
+import { useWishlist, useToggleWishlist } from "@/hooks/useWishlist";
+import { useAddToCart } from "@/hooks/useCart";
 import { Product } from "@/types/product";
 
 const ProductCard = ({ product }: { product: Product }) => {
     const [error, setError] = useState(false);
-    const { addItem } = useCartStore();
-    const { toggleWishlist, isInWishlist } = useWishlistStore();
+    const { data: wishlistItems = [] } = useWishlist();
+    const { mutate: toggleWishlist } = useToggleWishlist();
+    const { mutate: addToCart } = useAddToCart();
 
-    const isFav = isInWishlist(product._id);
+    const isFav = wishlistItems.some(item => item._id === product._id);
 
     const imageUrl =
         product.images &&
@@ -52,7 +53,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-                        toggleWishlist(product as any);
+                        toggleWishlist(product._id);
                     }}
                     aria-label={isFav ? "Remove from wishlist" : "Add to wishlist"}
                     className={`absolute right-4 top-4 rounded-xl glass-card p-2 transition-all duration-300 z-20 ${isFav
@@ -103,7 +104,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                                 return;
                             }
                             e.preventDefault();
-                            addItem(product._id);
+                            addToCart({ productId: product._id });
                         }}
                     >
                         {product.stock === 0

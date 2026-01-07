@@ -9,11 +9,13 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import api from "@/lib/axios";
 import { useCartStore } from "@/stores/cartStore";
+import { useClearCart } from "@/hooks/useCart";
 import { toast } from "sonner";
 
 const CheckoutPage = () => {
     const router = useRouter();
-    const { items, getTotalPrice, getSubtotal, clearCart, coupon, giftCard } = useCartStore();
+    const { items, getTotalPrice, getSubtotal, coupon, giftCard } = useCartStore();
+    const { mutate: clearCart } = useClearCart();
     const [isLoading, setIsLoading] = useState(false);
     const [mounted, setMounted] = useState(false);
 
@@ -70,11 +72,10 @@ const CheckoutPage = () => {
                 toast.info("Stripe Payment Hub Authorized. Redirecting to secure gateway...");
                 // router.push(`/checkout/stripe?secret=${paymentResponse.data.clientSecret}`);
             } else if (provider === "cod") {
-                await clearCart();
+                clearCart();
                 router.push(`/order/success?id=${String(orderId)}`);
             }
         } catch (error: any) {
-            console.error("Order failed:", error);
             toast.error(error.response?.data?.message || "Authorization failed. Check nexus link status.");
         } finally {
             setIsLoading(false);

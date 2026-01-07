@@ -14,7 +14,8 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 
 const ProductPage = () => {
   const { id } = useParams();
-  const { product, loading, error } = useProduct(id as string);
+  const { data: product, isLoading, isError, error: queryError } = useProduct(id as string);
+  const error = isError ? (queryError as any)?.response?.data?.message || "Product not found" : null;
   const { addItem } = useCartStore();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -28,7 +29,7 @@ const ProductPage = () => {
     }
   }, [product]);
 
-  if (loading) return (
+  if (isLoading) return (
     <div className="min-h-screen flex flex-col items-center justify-center space-y-6">
       <div className="relative w-32 h-32">
         <div className="absolute inset-0 animate-ping bg-primary/20 rounded-full" />

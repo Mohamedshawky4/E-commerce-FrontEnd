@@ -15,7 +15,6 @@ const Page = () => {
 
   useEffect(() => {
     if (initialized && token) {
-      console.log(token)
       router.push('/');
     }
   }, [initialized, token, router]);

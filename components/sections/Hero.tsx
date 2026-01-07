@@ -7,6 +7,7 @@ import { ArrowRight, ShoppingCart, Star, Zap, ChevronRight, Activity } from "luc
 import { m, useSpring, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 
 import api from "@/lib/axios";
+import { useProducts } from "@/hooks/useProducts";
 
 interface Product {
     _id: string;
@@ -82,9 +83,7 @@ const NeuralParticles = ({ mouseX, mouseY }: { mouseX: any; mouseY: any }) => {
 const Hero = () => {
     const router = useRouter();
     const containerRef = useRef<HTMLDivElement>(null);
-    const [products, setProducts] = useState<Product[]>([]);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
     const [enableAnimations, setEnableAnimations] = useState(false);
 
     // --- MOUSE TRACKING ---
@@ -98,20 +97,10 @@ const Hero = () => {
     const bgX = useTransform(springX, [-100, 100], [25, -25]);
     const bgY = useTransform(springY, [-100, 100], [25, -25]);
 
+    const { data: productsData, isLoading } = useProducts({ sort: "-averageRating", limit: 5 });
+    const products = productsData?.products || [];
+
     useEffect(() => {
-        const fetchTopProducts = async () => {
-            try {
-                const response = await api.get("/products?sort=-averageRating&limit=5");
-                setProducts(response.data.products || []);
-            } catch (error) {
-                console.error("Failed to fetch products for Hero:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTopProducts();
-
         // Defer animations until after LCP
         const animTimer = setTimeout(() => setEnableAnimations(true), 500);
 
@@ -217,7 +206,7 @@ const Hero = () => {
 
                     {/* --- BOUTIQUE STACK SHOWCASE --- */}
                     <div className="lg:col-span-6 h-[650px] lg:h-[800px] flex items-center justify-center relative">
-                        {loading ? (
+                        {isLoading ? (
                             <div className="flex flex-col items-center gap-6">
                                 <div className="w-16 h-16 border-t-2 border-primary rounded-full animate-spin shadow-[0_0_20px_rgba(var(--primary),0.3)]" />
                                 <span className="text-[10px] font-black tracking-[0.6em] text-text-muted uppercase animate-pulse">Synchronizing Data</span>

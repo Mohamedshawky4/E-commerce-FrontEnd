@@ -12,11 +12,11 @@ import { Search, SlidersHorizontal, X } from 'lucide-react';
 import api from '@/lib/axios';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useCategories } from '@/hooks/useCategories';
 
 import { Suspense } from 'react';
 
 const ProductsContent = () => {
-  const { products, loading, error, fetchProducts, pagination } = useProducts();
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get('search') || "";
 
@@ -24,6 +24,7 @@ const ProductsContent = () => {
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
   const [debouncedSearch, setDebouncedSearch] = useState<string>(initialSearch);
   const [showFilters, setShowFilters] = useState(false);
+  const [page, setPage] = useState(1);
 
   const [filters, setFilters] = useState({
     categories: [] as string[],
@@ -34,66 +35,71 @@ const ProductsContent = () => {
     hasStock: false,
   });
 
-  const [availableCategories, setAvailableCategories] = useState<{ _id: string; name: string }[]>([]);
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
 
-  // Fetch categories and brands
+  // Fetch categories using TanStack Query
+  const { data: categoriesData = [] } = useCategories();
+  const availableCategories = categoriesData;
+
+  // Fetch products using TanStack Query
+  const queryParams: any = {
+    sort: sortBy,
+    search: debouncedSearch,
+    page,
+    limit: 12,
+  };
+
+  if (filters.categories.length > 0) {
+    queryParams.category = filters.categories;
+  }
+  if (filters.minPrice > 0) {
+    queryParams.minPrice = filters.minPrice;
+  }
+  if (filters.maxPrice < 10000) {
+    queryParams.maxPrice = filters.maxPrice;
+  }
+  if (filters.brands.length > 0) {
+    queryParams.brand = filters.brands.join(',');
+  }
+  if (filters.rating > 0) {
+    queryParams.rating = filters.rating;
+  }
+  if (filters.hasStock) {
+    queryParams.hasStock = true;
+  }
+
+  const { data: productsData, isLoading: loading, isError, error: queryError } = useProducts(queryParams);
+  const products = productsData?.products || [];
+  const pagination = productsData?.pagination;
+  const error = isError ? (queryError as any)?.response?.data?.message || "Something went wrong" : null;
+
+  // Fetch brands (simpler to keep as is for now or could also be a hook)
   useEffect(() => {
-    const fetchFiltersData = async () => {
+    const fetchBrandsData = async () => {
       try {
-        const [categoriesRes, brandsRes] = await Promise.all([
-          api.get('/categories'),
-          api.get('/products/brands')
-        ]);
-        setAvailableCategories(categoriesRes.data.categories || []);
+        const brandsRes = await api.get('/products/brands');
         setAvailableBrands(brandsRes.data.brands || []);
       } catch (error) {
-        console.error('Error fetching filter data:', error);
+        console.error("Error fetching brands:", error);
       }
     };
-    fetchFiltersData();
+    fetchBrandsData();
   }, []);
 
   // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
+      setPage(1); // Reset to page 1 on search
     }, 500);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Fetch products when filters or search change
+  // Reset to page 1 when filters or sort change
   useEffect(() => {
-    const params: any = {
-      sort: sortBy,
-      search: debouncedSearch,
-    };
-
-    // Send categories as array instead of comma-separated string
-    if (filters.categories.length > 0) {
-      // Backend expects individual category queries or array
-      // Try sending first category for now
-      params.category = filters.categories;
-    }
-    if (filters.minPrice > 0) {
-      params.minPrice = filters.minPrice;
-    }
-    if (filters.maxPrice < 10000) {
-      params.maxPrice = filters.maxPrice;
-    }
-    if (filters.brands.length > 0) {
-      params.brand = filters.brands.join(',');
-    }
-    if (filters.rating > 0) {
-      params.rating = filters.rating;
-    }
-    if (filters.hasStock) {
-      params.hasStock = true;
-    }
-
-    fetchProducts(params);
-  }, [debouncedSearch, filters, sortBy]);
+    setPage(1);
+  }, [filters, sortBy]);
 
   const handleSort = (sortValue: string) => {
     setSortBy(sortValue);
@@ -147,7 +153,7 @@ const ProductsContent = () => {
     setSortBy('');
   };
 
-  const categoryNamesMap = availableCategories.reduce((acc, cat) => {
+  const categoryNamesMap = availableCategories.reduce((acc: { [key: string]: string }, cat: any) => {
     acc[cat._id] = cat.name;
     return acc;
   }, {} as { [key: string]: string });
@@ -273,7 +279,7 @@ const ProductsContent = () => {
           {pagination && products.length > 0 && (
             <PaginationButton
               pagination={pagination}
-              onPageChange={(newPage) => fetchProducts({ sort: sortBy, page: newPage, search: debouncedSearch, ...filters })}
+              onPageChange={(newPage) => setPage(newPage)}
             />
           )}
         </div>
