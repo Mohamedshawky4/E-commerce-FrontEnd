@@ -68,3 +68,25 @@ export const useSearchSuggestions = (query: string) => {
     staleTime: 30 * 1000, // 30 seconds for suggestions
   });
 };
+
+export const useTrendingProducts = () => {
+  return useQuery({
+    queryKey: ["products", "trending"],
+    queryFn: async () => {
+      const { data } = await api.get("/products/trending");
+      return (data.products || []) as Product[];
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+export const useTrendingKeywords = () => {
+  return useQuery({
+    queryKey: ["products", "trending-keywords"],
+    queryFn: async () => {
+      const { data } = await api.get("/products/trending-keywords");
+      return (data.keywords || []) as string[];
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
