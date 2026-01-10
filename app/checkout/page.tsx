@@ -11,6 +11,7 @@ import api from "@/lib/axios";
 import { useCartStore } from "@/stores/cartStore";
 import { useClearCart } from "@/hooks/useCart";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 const CheckoutPage = () => {
     const router = useRouter();
@@ -75,8 +76,9 @@ const CheckoutPage = () => {
                 clearCart();
                 router.push(`/order/success?id=${String(orderId)}`);
             }
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || "Authorization failed. Check nexus link status.");
+        } catch (error) {
+            const err = error as AxiosError<{ message: string }>;
+            toast.error(err.response?.data?.message || "Authorization failed. Check nexus link status.");
         } finally {
             setIsLoading(false);
         }
@@ -123,15 +125,15 @@ const CheckoutPage = () => {
                             <h2 className="text-sm font-black tracking-[0.2em] uppercase">Payment Protocol</h2>
                         </div>
                         <div className="grid grid-cols-3 gap-4">
-                            {[
+                            {([
                                 { id: "paymob", label: "Paymob", icon: CreditCard },
                                 { id: "stripe", label: "Stripe", icon: CreditCard },
                                 { id: "cod", label: "COD", icon: Wallet },
-                            ].map((p) => (
+                            ] as const).map((p) => (
                                 <button
                                     key={p.id}
                                     onClick={() => {
-                                        setProvider(p.id as any);
+                                        setProvider(p.id);
                                         if (p.id === "cod") setMethod("cod"); else setMethod("card");
                                     }}
                                     className={`glass-card p-6 flex flex-col items-center gap-3 transition-all duration-300 border ${provider === p.id ? "border-primary bg-primary/10" : "border-white/5 hover:border-white/20"}`}

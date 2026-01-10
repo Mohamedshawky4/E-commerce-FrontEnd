@@ -4,26 +4,24 @@ import Button from "../Button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowRight, ShoppingCart, Star, Zap, ChevronRight, Activity } from "lucide-react";
-import { m, useSpring, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
+import { m, useSpring, useMotionValue, useTransform, AnimatePresence, MotionValue } from "framer-motion";
 
 import api from "@/lib/axios";
 import { useProducts } from "@/hooks/useProducts";
+import { Product } from "@/types/product";
 
-interface Product {
-    _id: string;
-    name: string;
-    images?: string[];
-    price: number;
-    discountPercent?: number;
-    discountedPrice?: number;
-    averageRating?: number;
-    slug?: string;
-    brand?: string;
+interface Particle {
+    id: number;
+    x: number;
+    y: number;
+    size: number;
+    duration: number;
+    delay: number;
 }
 
 // --- NEURAL PARTICLE FIELD ---
-const NeuralParticles = ({ mouseX, mouseY }: { mouseX: any; mouseY: any }) => {
-    const [particles, setParticles] = useState<any[]>([]);
+const NeuralParticles = ({ mouseX, mouseY }: { mouseX: MotionValue<number>; mouseY: MotionValue<number> }) => {
+    const [particles, setParticles] = useState<Particle[]>([]);
 
     useEffect(() => {
         // Defer particle generation to free up main thread for LCP

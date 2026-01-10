@@ -180,7 +180,9 @@ const SearchBar = () => {
     );
 };
 
-const SuggestionItem = ({ product, onClick }: { product: any, onClick: () => void }) => (
+import { Product } from "@/types/product";
+
+const SuggestionItem = ({ product, onClick }: { product: Product, onClick: () => void }) => (
     <button
         onClick={onClick}
         className="w-full flex items-center gap-4 px-4 py-3 hover:bg-primary/10 transition-colors group/item"

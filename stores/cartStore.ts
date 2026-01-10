@@ -1,18 +1,12 @@
-"use client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { AxiosError } from "axios";
 import api from "@/lib/axios";
+import { Product, ProductVariant } from "@/types/product";
 
 export interface CartItem {
     _id: string;
-    product: {
-        _id: string;
-        name: string;
-        price: number;
-        images: string[];
-        slug: string;
-        variants?: any[]; // For finding variant details
-    };
+    product: Product;
     variantId?: string;
     quantity: number;
 }
@@ -64,7 +58,8 @@ export const useCartStore = create<CartState>()(
                 try {
                     const response = await api.get("/cart");
                     set({ items: response.data.cart.items, error: null });
-                } catch (err: any) {
+                } catch (error) {
+                    const err = error as AxiosError<{ message: string }>;
                     set({ error: err.response?.data?.message || "Failed to fetch cart" });
                 } finally {
                     set({ isLoading: false });
@@ -75,7 +70,7 @@ export const useCartStore = create<CartState>()(
                 try {
                     const response = await api.post("/cart", { productId, variantId, quantity });
                     set({ items: response.data.cart.items });
-                } catch (err: any) {
+                } catch (err) {
                     console.error("Failed to add to cart:", err);
                 }
             },
@@ -84,7 +79,7 @@ export const useCartStore = create<CartState>()(
                 try {
                     const response = await api.delete("/cart/item", { data: { productId, variantId } });
                     set({ items: response.data.cart.items });
-                } catch (err: any) {
+                } catch (err) {
                     console.error("Failed to remove from cart:", err);
                 }
             },
@@ -93,7 +88,7 @@ export const useCartStore = create<CartState>()(
                 try {
                     const response = await api.put("/cart/item", { productId, variantId, quantity });
                     set({ items: response.data.cart.items });
-                } catch (err: any) {
+                } catch (err) {
                     console.error("Failed to update quantity:", err);
                 }
             },
@@ -102,7 +97,7 @@ export const useCartStore = create<CartState>()(
                 try {
                     await api.delete("/cart");
                     set({ items: [], coupon: null, giftCard: null });
-                } catch (err: any) {
+                } catch (err) {
                     console.error("Failed to clear cart:", err);
                 }
             },
@@ -119,7 +114,8 @@ export const useCartStore = create<CartState>()(
                         },
                         error: null
                     });
-                } catch (err: any) {
+                } catch (error) {
+                    const err = error as AxiosError<{ message: string }>;
                     set({ error: err.response?.data?.message || "Invalid coupon" });
                     throw err;
                 } finally {
@@ -144,7 +140,8 @@ export const useCartStore = create<CartState>()(
                         },
                         error: null
                     });
-                } catch (err: any) {
+                } catch (error) {
+                    const err = error as AxiosError<{ message: string }>;
                     set({ error: err.response?.data?.message || "Invalid gift card" });
                     throw err;
                 } finally {

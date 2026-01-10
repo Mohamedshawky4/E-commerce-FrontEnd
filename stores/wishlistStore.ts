@@ -1,20 +1,10 @@
-"use client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { AxiosError } from "axios";
 import api from "@/lib/axios";
+import { Product } from "@/types/product";
 
-export interface WishlistItem {
-    _id: string;
-    name: string;
-    price: number;
-    images: string[];
-    slug: string;
-    discountedPrice?: number;
-    discountPercent?: number;
-    stock: number;
-    variants?: any[];
-    averageRating?: number;
-}
+export type WishlistItem = Product;
 
 interface WishlistState {
     items: WishlistItem[];
@@ -42,7 +32,8 @@ export const useWishlistStore = create<WishlistState>()(
                     // Backend returns: res.json({ success: true, wishlist: wishlist.products });
                     // So response.data.wishlist is the array of products.
                     set({ items: response.data.wishlist || [], error: null });
-                } catch (err: any) {
+                } catch (error) {
+                    const err = error as AxiosError<{ message: string }>;
                     set({ error: err.response?.data?.message || "Failed to fetch wishlist" });
                 } finally {
                     set({ isLoading: false });
@@ -59,7 +50,7 @@ export const useWishlistStore = create<WishlistState>()(
                         await api.post("/wishlist", { productIdOrSlug: product._id });
                         set({ items: [...get().items, product] });
                     }
-                } catch (err: any) {
+                } catch (err) {
                     console.error("Failed to toggle wishlist:", err);
                 }
             },
@@ -72,7 +63,7 @@ export const useWishlistStore = create<WishlistState>()(
                 try {
                     await api.delete("/wishlist");
                     set({ items: [] });
-                } catch (err: any) {
+                } catch (err) {
                     console.error("Failed to clear wishlist:", err);
                 }
             },

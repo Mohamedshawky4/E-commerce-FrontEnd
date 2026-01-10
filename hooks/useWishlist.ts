@@ -1,18 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 
-export interface WishlistItem {
-    _id: string;
-    name: string;
-    price: number;
-    images: string[];
-    slug: string;
-    discountedPrice?: number;
-    discountPercent?: number;
-    stock: number;
-    variants?: any[];
-    averageRating?: number;
-}
+import { Product } from "@/types/product";
+
+export type WishlistItem = Product;
 
 export const useWishlist = () => {
     return useQuery({
@@ -30,8 +21,8 @@ export const useToggleWishlist = () => {
     return useMutation({
         mutationFn: async (productId: string) => {
             const response = await api.get("/wishlist");
-            const currentItems = response.data.wishlist || [];
-            const isIn = currentItems.some((item: any) => item._id === productId);
+            const currentItems = (response.data.wishlist || []) as WishlistItem[];
+            const isIn = currentItems.some((item) => item._id === productId);
 
             if (isIn) {
                 return api.delete(`/wishlist/${productId}`);

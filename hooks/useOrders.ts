@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
+import { ProductVariant } from "@/types/product";
 
 export interface OrderItem {
     product: string;
     productName: string;
     productBrand: string;
     variantId?: string;
-    variantSnapshot?: any;
+    variantSnapshot?: ProductVariant;
     unitPrice: number;
     quantity: number;
     lineTotal: number;

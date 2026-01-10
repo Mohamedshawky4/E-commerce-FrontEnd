@@ -12,7 +12,7 @@ interface ActiveFiltersProps {
         hasStock: boolean;
         search?: string;
     };
-    onRemoveFilter: (filterType: string, value?: any) => void;
+    onRemoveFilter: (filterType: string, value?: string) => void;
     onClearAll: () => void;
     categoryNames?: { [key: string]: string };
 }

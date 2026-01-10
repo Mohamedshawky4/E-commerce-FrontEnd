@@ -1,20 +1,35 @@
 "use client";
+import React, { useState, useEffect, Suspense } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { AxiosError } from "axios";
+
+import api from '@/lib/axios';
+import { useProducts } from '@/hooks/useProducts';
+import { useCategories } from '@/hooks/useCategories';
+import { Product } from "@/types/product";
+import { Category } from "@/types/category";
+
 import ProductCard from '@/components/ProductCard';
 import ProductCardSkeleton from '@/components/ProductCardSkeleton';
 import ProductFilters from '@/components/ProductFilters';
 import ActiveFilters from '@/components/ActiveFilters';
-import React, { useState, useEffect } from 'react';
-import { useProducts } from '@/hooks/useProducts';
 import SortDropdown from '@/components/SortDropDown';
-import { Product } from "@/types/product";
 import { PaginationButton } from '@/components/Pagination';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
-import api from '@/lib/axios';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useCategories } from '@/hooks/useCategories';
 
-import { Suspense } from 'react';
+interface FilterParams {
+  sort: string;
+  search: string;
+  page: number;
+  limit: number;
+  category?: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  brand?: string;
+  rating?: number;
+  hasStock?: boolean;
+}
 
 const ProductsContent = () => {
   const searchParams = useSearchParams();
@@ -42,7 +57,7 @@ const ProductsContent = () => {
   const availableCategories = categoriesData;
 
   // Fetch products using TanStack Query
-  const queryParams: any = {
+  const queryParams: FilterParams = {
     sort: sortBy,
     search: debouncedSearch,
     page,
@@ -71,7 +86,7 @@ const ProductsContent = () => {
   const { data: productsData, isLoading: loading, isError, error: queryError } = useProducts(queryParams);
   const products = productsData?.products || [];
   const pagination = productsData?.pagination;
-  const error = isError ? (queryError as any)?.response?.data?.message || "Something went wrong" : null;
+  const error = isError ? (queryError as AxiosError<{ message: string }>)?.response?.data?.message || "Something went wrong" : null;
 
   // Fetch brands (simpler to keep as is for now or could also be a hook)
   useEffect(() => {
@@ -109,7 +124,7 @@ const ProductsContent = () => {
     setFilters(newFilters);
   };
 
-  const handleRemoveFilter = (filterType: string, value?: any) => {
+  const handleRemoveFilter = (filterType: string, value?: string) => {
     switch (filterType) {
       case 'search':
         setSearchQuery('');
@@ -153,7 +168,7 @@ const ProductsContent = () => {
     setSortBy('');
   };
 
-  const categoryNamesMap = availableCategories.reduce((acc: { [key: string]: string }, cat: any) => {
+  const categoryNamesMap = availableCategories.reduce((acc: { [key: string]: string }, cat: Category) => {
     acc[cat._id] = cat.name;
     return acc;
   }, {} as { [key: string]: string });

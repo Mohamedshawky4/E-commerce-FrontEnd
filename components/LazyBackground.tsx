@@ -9,9 +9,9 @@ const LazyBackground = () => {
         // Significantly defer background to prioritize LCP and main content
         const mountBackground = () => setMounted(true);
 
-        let timer: any;
+        let timer: ReturnType<typeof setTimeout>;
         if ('requestIdleCallback' in window) {
-            (window as any).requestIdleCallback(() => {
+            (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => {
                 timer = setTimeout(mountBackground, 800);
             });
         } else {

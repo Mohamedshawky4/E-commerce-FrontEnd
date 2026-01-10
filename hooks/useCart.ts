@@ -1,16 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
+import { Product, ProductVariant } from "@/types/product";
 
 export interface CartItem {
     _id: string;
-    product: {
-        _id: string;
-        name: string;
-        price: number;
-        images: string[];
-        slug: string;
-        variants?: any[];
-    };
+    product: Product;
     variantId?: string;
     quantity: number;
 }

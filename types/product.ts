@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export interface ProductVariant {
   _id: string;
   size?: string;
@@ -9,15 +11,18 @@ export interface ProductVariant {
 export interface Product {
   _id: string;
   name: string;
+  slug: string;
   description: string;
-  images?: string[];
-  price: number;
-  discountPercent?: number;
-  discountedPrice?: number;
-  averageRating?: number;
-  slug?: string;
-  categories?: { _id: string; name: string; slug: string }[];
-  stock: number;
-  variants?: ProductVariant[];
+  images: string[];
   brand?: string;
+  price: number;
+  discountPercent: number; // Backend defaults to 0
+  discountedPrice?: number; // Virtual
+  categories?: Category[]; // Populated
+  stock: number;
+  variants: ProductVariant[];
+  averageRating: number; // Backend defaults to 0
+  reviewCount: number; // Backend defaults to 0
+  createdAt: string;
+  updatedAt: string;
 }

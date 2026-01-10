@@ -1,17 +1,21 @@
 "use client";
 import React from 'react';
 
+import { Category } from "@/types/category";
+
+export interface FiltersState {
+    categories: string[];
+    minPrice: number;
+    maxPrice: number;
+    brands: string[];
+    rating: number;
+    hasStock: boolean;
+}
+
 interface ProductFiltersProps {
-    filters: {
-        categories: string[];
-        minPrice: number;
-        maxPrice: number;
-        brands: string[];
-        rating: number;
-        hasStock: boolean;
-    };
-    onFilterChange: (filters: any) => void;
-    availableCategories?: { _id: string; name: string }[];
+    filters: FiltersState;
+    onFilterChange: (filters: FiltersState) => void;
+    availableCategories?: Category[];
     availableBrands?: string[];
 }
 
