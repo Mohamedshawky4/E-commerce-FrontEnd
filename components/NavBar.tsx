@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import {
   Heart, ShoppingCart,
-  Menu, X, LogOut, Zap
+  Menu, X, LogOut, Zap, User
 } from "lucide-react";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
@@ -115,9 +115,16 @@ const NavBar = () => {
           {/* Auth Buttons */}
           <div className="hidden md:flex gap-3">
             {token ? (
-              <Button variant="metal" size="sm" onClick={logout} leftIcon={<LogOut size={14} />}>
-                LOGOUT
-              </Button>
+              <>
+                <Link href="/profile">
+                  <Button variant="ghost" size="sm" leftIcon={<User size={16} />}>
+                    PROFILE
+                  </Button>
+                </Link>
+                <Button variant="metal" size="sm" onClick={logout} leftIcon={<LogOut size={14} />}>
+                  LOGOUT
+                </Button>
+              </>
             ) : (
               <Link href="/login">
                 <Button variant="liquid" size="sm" leftIcon={<Zap size={14} />}>

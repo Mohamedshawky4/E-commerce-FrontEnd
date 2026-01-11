@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 type InputSize = "sm" | "md" | "lg";
-type InputType = "text" | "email" | "password" | "number" | "search";
+type InputType = "text" | "email" | "password" | "number" | "search" | "tel";
 type InputVariant = "default" | "outline" | "ghost" | "disabled";
 
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
@@ -18,6 +18,7 @@ interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, '
   inputSize?: InputSize;
   variant?: InputVariant;
   disabled?: boolean;
+  error?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -31,6 +32,7 @@ const Input: React.FC<InputProps> = ({
   inputSize = "md",
   variant = "default",
   disabled = false,
+  error,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -80,6 +82,7 @@ const Input: React.FC<InputProps> = ({
             sizeStyles[inputSize],
             variantStyles[variant],
             isPassword && "pr-10", // add padding for eye icon
+            error && "border-red-500 ring-red-500/10 focus:ring-red-500",
             className
           )}
           {...props}
@@ -99,6 +102,7 @@ const Input: React.FC<InputProps> = ({
           </button>
         )}
       </div>
+      {error && <span className="text-xs text-red-500 px-1">{error}</span>}
     </div>
   );
 };
