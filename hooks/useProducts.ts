@@ -16,7 +16,20 @@ interface ProductsResponse {
   pagination?: Pagination;
 }
 
-export const useProducts = (params: Record<string, any> = {}, enabled = true) => {
+export interface ProductFilterParams {
+  category?: string | string[];
+  minPrice?: number;
+  maxPrice?: number;
+  brand?: string | string[];
+  rating?: number;
+  hasStock?: boolean;
+  search?: string;
+  sort?: string;
+  page?: number;
+  limit?: number;
+}
+
+export const useProducts = (params: ProductFilterParams = {}, enabled = true) => {
   return useQuery({
     queryKey: ["products", params],
     queryFn: async () => {

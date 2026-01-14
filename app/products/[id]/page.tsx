@@ -9,6 +9,7 @@ import { Star, Truck, ShieldCheck, Heart, ShoppingCart, Maximize2, X, Minus, Plu
 import Image from 'next/image';
 import clsx from 'clsx';
 import { m, AnimatePresence } from 'framer-motion';
+import { AxiosError } from "axios";
 
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ProductReviews from '@/components/ProductReviews';
@@ -17,7 +18,7 @@ import RelatedProducts from '@/components/RelatedProducts';
 const ProductPage = () => {
   const { id } = useParams();
   const { data: product, isLoading, isError, error: queryError } = useProduct(id as string);
-  const error = isError ? (queryError as any)?.response?.data?.message || "Product not found" : null;
+  const error = isError ? (queryError as AxiosError<{ message: string }>)?.response?.data?.message || "Product not found" : null;
   const { addItem } = useCartStore();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -217,20 +218,30 @@ const ProductPage = () => {
               <div className="space-y-4">
                 <label className="text-sm font-black tracking-widest uppercase text-foreground/60">Choose Color</label>
                 <div className="flex flex-wrap gap-3 mt-2">
-                  {availableColors.map(color => (
-                    <button
-                      key={color}
-                      onClick={() => setSelectedColor(color)}
-                      className={clsx(
-                        "px-6 py-3 rounded-xl font-bold transition-all border-2",
-                        selectedColor === color
-                          ? "bg-primary text-background border-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
-                          : "glass-card hover:border-primary/50 text-foreground"
-                      )}
-                    >
-                      {color}
-                    </button>
-                  ))}
+                  {availableColors.map(color => {
+                    // Check if this color has ANY stock across all sizes (if size selected, check just that size)
+                    const colorVariants = product.variants?.filter(v => v.color === color) || [];
+                    const isColorAvailable = selectedSize
+                      ? colorVariants.some(v => v.size === selectedSize && v.stock > 0)
+                      : colorVariants.some(v => v.stock > 0);
+
+                    return (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color === selectedColor ? null : color)}
+                        className={clsx(
+                          "px-6 py-3 rounded-xl font-bold transition-all border-2",
+                          selectedColor === color
+                            ? "bg-primary text-background border-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
+                            : "glass-card hover:border-primary/50 text-foreground",
+                          !isColorAvailable && "opacity-20 grayscale cursor-not-allowed border-dashed"
+                        )}
+                        disabled={!isColorAvailable && selectedColor === color}
+                      >
+                        {color}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -239,20 +250,30 @@ const ProductPage = () => {
               <div className="space-y-4">
                 <label className="text-sm font-black tracking-widest uppercase text-foreground/60">Select Size</label>
                 <div className="flex flex-wrap gap-3 mt-2">
-                  {availableSizes.map(size => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={clsx(
-                        "w-14 h-14 rounded-xl font-bold transition-all border-2 flex items-center justify-center",
-                        selectedSize === size
-                          ? "bg-primary text-background border-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
-                          : "glass-card hover:border-primary/50 text-foreground"
-                      )}
-                    >
-                      {size}
-                    </button>
-                  ))}
+                  {availableSizes.map(size => {
+                    // Check if this size has ANY stock across all colors (if color selected, check just that color)
+                    const sizeVariants = product.variants?.filter(v => v.size === size) || [];
+                    const isSizeAvailable = selectedColor
+                      ? sizeVariants.some(v => v.color === selectedColor && v.stock > 0)
+                      : sizeVariants.some(v => v.stock > 0);
+
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size === selectedSize ? null : size)}
+                        className={clsx(
+                          "w-14 h-14 rounded-xl font-bold transition-all border-2 flex items-center justify-center",
+                          selectedSize === size
+                            ? "bg-primary text-background border-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
+                            : "glass-card hover:border-primary/50 text-foreground",
+                          !isSizeAvailable && "opacity-20 grayscale cursor-not-allowed border-dashed"
+                        )}
+                        disabled={!isSizeAvailable && selectedSize === size}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
