@@ -12,6 +12,7 @@ import { m, AnimatePresence } from 'framer-motion';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ProductReviews from '@/components/ProductReviews';
+import RelatedProducts from '@/components/RelatedProducts';
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -301,6 +302,11 @@ const ProductPage = () => {
       {/* Reviews Section */}
       <div className="mt-20">
         <ProductReviews productId={product._id} />
+      </div>
+
+      {/* Related Products Section */}
+      <div className="mt-20">
+        <RelatedProducts productId={product._id} />
       </div>
     </div>
   );

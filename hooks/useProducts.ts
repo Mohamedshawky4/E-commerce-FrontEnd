@@ -90,3 +90,15 @@ export const useTrendingKeywords = () => {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
+
+export const useRelatedProducts = (idOrSlug: string, enabled = true) => {
+  return useQuery({
+    queryKey: ["products", "related", idOrSlug],
+    queryFn: async () => {
+      const { data } = await api.get(`/products/${idOrSlug}/related`);
+      return (data.relatedProducts || []) as Product[];
+    },
+    enabled: !!idOrSlug && enabled,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+};

@@ -5,17 +5,27 @@ import { m } from "framer-motion";
 import Button from "../Button";
 import Input from "../Input";
 import { toast } from "sonner";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight, Loader2 } from "lucide-react";
+import api from "@/lib/axios";
+import { AxiosError } from "axios";
 
 const Newsletter = () => {
     const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle newsletter subscription logic here
-        console.log("Subscribed with:", email);
-        setEmail("");
-        toast.success("Vector Authorized. Welcome to the Nexus.");
+        setIsLoading(true);
+        try {
+            const response = await api.post("/subscribers", { email });
+            toast.success(response.data.message || "Vector Authorized. Welcome to the Nexus.");
+            setEmail("");
+        } catch (error) {
+            const err = error as AxiosError<{ message?: string }>;
+            toast.error(err.response?.data?.message || "Transmission failed. Signal lost.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -77,8 +87,9 @@ const Newsletter = () => {
                         <Button
                             type="submit"
                             variant="liquid"
-                            rightIcon={<ArrowRight size={18} />}
+                            rightIcon={isLoading ? <Loader2 size={18} className="animate-spin" /> : <ArrowRight size={18} />}
                             className="rounded-2xl px-10 py-4 font-black tracking-widest"
+                            isLoading={isLoading}
                         >
                             AUTHORIZE
                         </Button>

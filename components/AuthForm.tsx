@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,8 +34,12 @@ const authSchema = z.object({
 
 type AuthSchemaType = z.infer<typeof authSchema>;
 
-const AuthForm: React.FC = () => {
-    const [isLogin, setIsLogin] = useState(true);
+interface AuthFormProps {
+    initialMode?: "login" | "register";
+}
+
+const AuthForm: React.FC<AuthFormProps> = ({ initialMode = "login" }) => {
+    const [isLogin, setIsLogin] = useState(initialMode === "login");
     const { setUser } = useAuthStore();
     const router = useRouter();
 
@@ -98,22 +103,28 @@ const AuthForm: React.FC = () => {
         }
     };
 
-    const handleGoogleSignIn = async () => {
-        setIsApiLoading(true);
-        try {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            const mockToken = "google-jwt-token-" + Date.now();
-            const mockRefreshToken = "google-refresh-token-" + Date.now();
-            const mockEmail = "user@gmail.com";
-            setUser(mockEmail, mockToken, mockRefreshToken);
-            toast.success("Google Nexus link established.");
-            router.push("/");
-        } catch (error) {
-            toast.error("Google Sign In failed.");
-        } finally {
-            setIsApiLoading(false);
+    const handleGoogleSignIn = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            setIsApiLoading(true);
+            try {
+                const response = await api.post("/users/google-login", {
+                    accessToken: tokenResponse.access_token,
+                });
+                const { token, refreshToken, user } = response.data;
+                setUser(user.email, token, refreshToken);
+                toast.success("Identity Verified via Google Nexus.");
+                router.push("/");
+            } catch (error) {
+                console.error(error);
+                toast.error("Google Authentication failed.");
+            } finally {
+                setIsApiLoading(false);
+            }
+        },
+        onError: () => {
+            toast.error("Google Login Failed");
         }
-    };
+    });
 
     // ... rest of the component animations and JSX stay identical but use register() and errors from hook-form
     // I'll need to update the JSX part too, so I'll do it in a combined block below if possible, 
@@ -257,7 +268,7 @@ const AuthForm: React.FC = () => {
                                     variant="metal"
                                     size="lg"
                                     fullWidth
-                                    onClick={handleGoogleSignIn}
+                                    onClick={() => handleGoogleSignIn()}
                                     isLoading={isLoading}
                                     leftIcon={
                                         <svg className="w-5 h-5" viewBox="0 0 24 24">
