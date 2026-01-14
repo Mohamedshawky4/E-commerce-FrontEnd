@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import { m, AnimatePresence } from 'framer-motion';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
+import ProductReviews from '@/components/ProductReviews';
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -111,10 +112,10 @@ const ProductPage = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-2xl flex items-center justify-center p-4 md:p-12"
+                className="fixed inset-0 z-100 bg-background/95 backdrop-blur-2xl flex items-center justify-center p-4 md:p-12"
                 onClick={() => setIsFullScreen(false)}
               >
-                <div className="absolute top-8 right-8 z-[110]">
+                <div className="absolute top-8 right-8 z-110">
                   <button
                     onClick={() => setIsFullScreen(false)}
                     aria-label="Close full screen view"
@@ -181,6 +182,26 @@ const ProductPage = () => {
                 <span className="text-xl text-foreground/30 line-through font-medium">
                   ${product.price}
                 </span>
+              )}
+            </div>
+
+            {/* Inventory Feedback */}
+            <div className="mt-4 flex items-center gap-3">
+              {product.stock === 0 ? (
+                <div className="flex items-center gap-2 text-rose-500">
+                  <X size={16} />
+                  <span className="text-xs font-black tracking-widest uppercase">Nexus Stock Exhausted</span>
+                </div>
+              ) : product.stock <= 10 ? (
+                <div className="flex items-center gap-2 text-amber-500">
+                  <div className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                  <span className="text-xs font-black tracking-widest uppercase italic">CRITICAL STOCK: {product.stock} UNITS REMAINING</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-emerald-500/60">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="text-xs font-bold tracking-widest uppercase">Nexus Verified Availability</span>
+                </div>
               )}
             </div>
           </div>
@@ -275,6 +296,11 @@ const ProductPage = () => {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-20">
+        <ProductReviews productId={product._id} />
       </div>
     </div>
   );

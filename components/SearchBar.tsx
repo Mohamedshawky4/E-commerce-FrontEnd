@@ -211,10 +211,32 @@ const SuggestionItem = ({ product, onClick }: { product: Product, onClick: () =>
                 )}
             </div>
         </div>
-        <div className="text-right shrink-0">
-            <span className="text-sm font-black text-primary">
-                ${product.price}
-            </span>
+        <div className="text-right shrink-0 flex flex-col items-end gap-1">
+            {product.discountedPrice && product.discountedPrice < product.price ? (
+                <>
+                    <span className="text-[10px] text-foreground/30 line-through font-medium">
+                        ${product.price}
+                    </span>
+                    <span className="text-sm font-black text-primary">
+                        ${product.discountedPrice}
+                    </span>
+                </>
+            ) : (
+                <span className="text-sm font-black text-primary">
+                    ${product.price}
+                </span>
+            )}
+
+            {product.stock > 0 && product.stock <= 5 && (
+                <span className="text-[8px] font-black text-amber-500 uppercase tracking-tighter">
+                    LOW STOCK
+                </span>
+            )}
+            {product.stock === 0 && (
+                <span className="text-[8px] font-black text-rose-500 uppercase tracking-tighter">
+                    SOLD OUT
+                </span>
+            )}
         </div>
     </button>
 );

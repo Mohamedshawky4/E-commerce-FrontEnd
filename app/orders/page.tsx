@@ -64,7 +64,7 @@ const OrderHistoryPage = () => {
                         {orders.map((order) => (
                             <div
                                 key={order._id}
-                                className="group relative overflow-hidden rounded-[2rem] glass-card border border-white/5 bg-white/[0.02] p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-500"
+                                className="group relative overflow-hidden rounded-4xl glass-card border border-white/5 bg-white/2 p-6 md:p-8 hover:bg-white/4 transition-all duration-500"
                             >
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -mr-32 -mt-32 transition-all group-hover:bg-primary/10" />
 
@@ -113,7 +113,7 @@ const OrderHistoryPage = () => {
                                         {/* Product Preview */}
                                         <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                                             {order.items.map((item, idx) => (
-                                                <div key={idx} className="flex-shrink-0 w-16 h-16 rounded-2xl glass-card border border-white/10 bg-surface flex items-center justify-center p-2">
+                                                <div key={idx} className="shrink-0 w-16 h-16 rounded-2xl glass-card border border-white/10 bg-surface flex items-center justify-center p-2">
                                                     {/* Placeholder for images if available later */}
                                                     <Box size={24} className="text-white/20" />
                                                 </div>
@@ -123,7 +123,7 @@ const OrderHistoryPage = () => {
 
                                     {/* Action Hooks */}
                                     <div className="lg:w-64 flex flex-col justify-between gap-4">
-                                        <Link href={`/orders/${order._id}`} className="block w-full">
+                                        <Link href={`/orders/${order._id}/track`} className="block w-full">
                                             <Button
                                                 variant="liquid"
                                                 className="w-full h-14 text-[10px] font-black tracking-widest"
@@ -132,17 +132,6 @@ const OrderHistoryPage = () => {
                                                 VIEW DETAILS
                                             </Button>
                                         </Link>
-                                        {order.status !== "pending" && order.status !== "cancelled" && (
-                                            <Link href={`/orders/${order._id}/track`} className="block w-full">
-                                                <Button
-                                                    variant="outline"
-                                                    className="w-full h-14 text-[10px] font-black tracking-widest border-white/5 group-hover:border-primary/50"
-                                                    leftIcon={<MapPin size={16} />}
-                                                >
-                                                    TRACK SHIPMENT
-                                                </Button>
-                                            </Link>
-                                        )}
                                         {/* Add Download Invoice Link if relevant */}
                                         <a href={`${process.env.NEXT_PUBLIC_API_URL}/orders/${order._id}/invoice`} target="_blank" rel="noopener noreferrer">
                                             <button className="w-full flex items-center justify-center gap-2 text-[10px] font-bold text-foreground/40 hover:text-primary transition-colors py-2">

@@ -15,10 +15,15 @@ import { AxiosError } from "axios";
 
 const CheckoutPage = () => {
     const router = useRouter();
-    const { items, getTotalPrice, getSubtotal, coupon, giftCard } = useCartStore();
+    const { items, getTotalPrice, getSubtotal, coupon, giftCard, applyCoupon, applyGiftCard, removeCoupon, removeGiftCard } = useCartStore();
     const { mutate: clearCart } = useClearCart();
     const [isLoading, setIsLoading] = useState(false);
     const [mounted, setMounted] = useState(false);
+
+    const [couponInput, setCouponInput] = useState("");
+    const [giftCardInput, setGiftCardInput] = useState("");
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+    const [isApplyingGiftCard, setIsApplyingGiftCard] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -149,8 +154,8 @@ const CheckoutPage = () => {
                 {/* Summarized Breakdown */}
                 <div className="lg:pl-8">
                     <div className="glass-card p-10 space-y-10 relative overflow-hidden bg-gradient-to-br from-white/5 to-transparent">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[60px] rounded-full -mr-16 -mt-16" />
-
+                        <div className="absolute top-0 right-0 w-[80%] h-[80%] bg-primary/10 blur-[120px] rounded-full z-100" />
+                        <div className="absolute bottom-0 left-0 w-[60%] h-[60%] bg-secondary/10 blur-[100px] rounded-full z-100" />
                         <div className="space-y-6 max-h-[400px] overflow-y-auto pr-4 scrollbar-hide">
                             <h3 className="text-[10px] font-black tracking-[0.3em] uppercase text-foreground/40">Manifest Items</h3>
                             {items.map((item, index) => (
@@ -194,6 +199,95 @@ const CheckoutPage = () => {
                             <div className="flex justify-between items-center pt-4 border-t border-white/5">
                                 <span className="text-xs font-black text-foreground/40 uppercase tracking-widest">Total Valuation</span>
                                 <span className="text-4xl font-black text-primary text-glow">${getTotalPrice().toFixed(2)}</span>
+                            </div>
+
+                            {/* Voucher & Rewards Section */}
+                            <div className="space-y-6 pt-6 border-t border-white/5">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                        <h4 className="text-[10px] font-black tracking-[0.2em] uppercase text-foreground/60">Apply Protocol Vouchers</h4>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <div className="flex-1">
+                                            <Input
+                                                placeholder="ENTER COUPON..."
+                                                value={couponInput}
+                                                onChange={(e) => setCouponInput(e.target.value)}
+                                                className="bg-white/5 border-white/10"
+                                                disabled={!!coupon}
+                                            />
+                                        </div>
+                                        <Button
+                                            variant={coupon ? "outline" : "metal"}
+                                            size="sm"
+                                            className="px-6 text-[10px] font-black"
+                                            isLoading={isApplyingCoupon}
+                                            onClick={async () => {
+                                                if (coupon) {
+                                                    removeCoupon();
+                                                    setCouponInput("");
+                                                } else {
+                                                    if (!couponInput.trim()) return;
+                                                    setIsApplyingCoupon(true);
+                                                    try {
+                                                        await applyCoupon(couponInput);
+                                                        toast.success("Voucher Sequence Validated.");
+                                                    } catch (err) {
+                                                        // Error handled by store
+                                                    } finally {
+                                                        setIsApplyingCoupon(false);
+                                                    }
+                                                }
+                                            }}
+                                        >
+                                            {coupon ? "REMOVE" : "APPLY"}
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                                        <h4 className="text-[10px] font-black tracking-[0.2em] uppercase text-foreground/60">Redeem Gift Nexus Card</h4>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <div className="flex-1">
+                                            <Input
+                                                placeholder="GIFT CARD CODE..."
+                                                value={giftCardInput}
+                                                onChange={(e) => setGiftCardInput(e.target.value)}
+                                                className="bg-white/5 border-white/10"
+                                                disabled={!!giftCard}
+                                            />
+                                        </div>
+                                        <Button
+                                            variant={giftCard ? "outline" : "metal"}
+                                            size="sm"
+                                            className="px-6 text-[10px] font-black"
+                                            isLoading={isApplyingGiftCard}
+                                            onClick={async () => {
+                                                if (giftCard) {
+                                                    removeGiftCard();
+                                                    setGiftCardInput("");
+                                                } else {
+                                                    if (!giftCardInput.trim()) return;
+                                                    setIsApplyingGiftCard(true);
+                                                    try {
+                                                        await applyGiftCard(giftCardInput);
+                                                        toast.success("Gift Balance Link Established.");
+                                                    } catch (err) {
+                                                        // Error handled by store
+                                                    } finally {
+                                                        setIsApplyingGiftCard(false);
+                                                    }
+                                                }
+                                            }}
+                                        >
+                                            {giftCard ? "REMOVE" : "REDEEM"}
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
 
                             <Button

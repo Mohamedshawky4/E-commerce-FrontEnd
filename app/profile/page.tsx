@@ -13,7 +13,12 @@ import {
     Camera,
     Phone,
     Mail,
-    Loader2
+    Loader2,
+    ShoppingBag,
+    ArrowRight,
+    Search,
+    Settings,
+    Heart
 } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import {
@@ -27,6 +32,7 @@ import {
     useDeleteAddress,
     useSetDefaultAddress
 } from "@/hooks/useUser";
+import { useOrders } from "@/hooks/useOrders";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Modal from "@/components/ui/Modal";
@@ -42,6 +48,7 @@ export default function ProfilePage() {
     // Queries
     const { data: user, isLoading: isUserLoading, error: userError } = useUserProfile();
     const { data: addresses, isLoading: isAddressesLoading } = useUserAddresses();
+    const { data: orders } = useOrders();
 
     // Mutations
     const updateProfileMutation = useUpdateProfile();
@@ -308,6 +315,34 @@ export default function ProfilePage() {
                     </AnimatePresence>
                 </m.div>
 
+                {/* Quick Navigation Cards */}
+                <div className="flex justify-center">
+                    <m.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        onClick={() => router.push("/orders")}
+                        className="group bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 cursor-pointer hover:border-blue-500/30 transition-all duration-500 relative overflow-hidden max-w-md w-full"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <ShoppingBag size={80} />
+                        </div>
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="p-4 rounded-2xl bg-blue-500/10 text-blue-500">
+                                <ShoppingBag size={28} />
+                            </div>
+                            <span className="text-[10px] font-black tracking-widest text-blue-500 bg-blue-500/10 px-4 py-1.5 rounded-full">
+                                {orders?.length || 0} RECORDS
+                            </span>
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-2 uppercase tracking-tighter">Purchase Vault</h3>
+                        <p className="text-gray-400 text-sm mb-6">Access your localized transaction history and delivery status node.</p>
+                        <div className="flex items-center gap-2 text-blue-500 text-xs font-bold uppercase tracking-widest">
+                            Open Archives <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </m.div>
+                </div>
+
                 {/* Addresses Section */}
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
@@ -344,7 +379,7 @@ export default function ProfilePage() {
                 />
             </Modal>
 
-        </div>
+        </div >
     );
 }
 

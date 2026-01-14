@@ -49,6 +49,19 @@ const ProductCard = ({ product }: { product: Product }) => {
                     </div>
                 )}
 
+                {/* Inventory Badge */}
+                {product.stock === 0 ? (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+                        <span className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-[10px] font-black tracking-[0.3em] text-white">
+                            out of stock
+                        </span>
+                    </div>
+                ) : product.stock <= 5 ? (
+                    <div className="absolute top-4 right-4 bg-amber-500 text-black text-[9px] font-black px-2 py-1 rounded-md shadow-xl z-20 animate-pulse">
+                        ONLY {product.stock} LEFT
+                    </div>
+                ) : null}
+
                 {/* Heart Icon */}
                 <button
                     onClick={(e) => {

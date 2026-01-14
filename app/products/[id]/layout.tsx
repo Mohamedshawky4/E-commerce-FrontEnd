@@ -4,7 +4,7 @@ import api from '@/lib/axios'; // This might not work in server components if it
 
 async function getProduct(id: string) {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:5000/api';
         const res = await fetch(`${baseUrl}/products/${id}`, {
             next: { revalidate: 3600 },
             headers: { 'Content-Type': 'application/json' }
