@@ -20,6 +20,7 @@ export const useToggleWishlist = () => {
 
     return useMutation({
         mutationFn: async (productId: string) => {
+            // We can optimize this by checking cache first or just letting the backend handle it
             const response = await api.get("/wishlist");
             const currentItems = (response.data.wishlist || []) as WishlistItem[];
             const isIn = currentItems.some((item) => item._id === productId);
@@ -36,6 +37,11 @@ export const useToggleWishlist = () => {
     });
 };
 
+export const useIsInWishlist = (productId: string) => {
+    const { data: wishlist = [] } = useWishlist();
+    return wishlist.some((item) => item._id === productId);
+};
+
 export const useClearWishlist = () => {
     const queryClient = useQueryClient();
 
@@ -48,3 +54,4 @@ export const useClearWishlist = () => {
         },
     });
 };
+

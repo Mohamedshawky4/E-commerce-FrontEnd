@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Zap, TrendingUp, SearchX, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import clsx from 'clsx';
 import { useSearchSuggestions, useTrendingProducts, useTrendingKeywords } from '@/hooks/useProducts';
 
 const SearchBar = () => {
@@ -57,6 +58,37 @@ const SearchBar = () => {
         setQuery('');
     };
 
+    const [focusedIndex, setFocusedIndex] = useState(-1);
+
+    const activeSuggestions = query.length <= 1 ? trendingProducts : suggestions;
+
+    // Reset focus index when dropdown/results change
+    useEffect(() => {
+        setFocusedIndex(-1);
+    }, [query, isFocused]);
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (!showDropdown) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setFocusedIndex(prev => (prev < activeSuggestions.length - 1 ? prev + 1 : prev));
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setFocusedIndex(prev => (prev > -1 ? prev - 1 : -1));
+        } else if (e.key === 'Enter') {
+            if (focusedIndex >= 0) {
+                e.preventDefault();
+                const product = activeSuggestions[focusedIndex];
+                if (product.slug) handleSuggestionClick(product.slug);
+            } else {
+                handleSearch();
+            }
+        } else if (e.key === 'Escape') {
+            setIsFocused(false);
+        }
+    };
+
     return (
         <div className="relative w-full max-w-md group" ref={searchRef}>
             <form onSubmit={handleSearch} className="relative flex items-center">
@@ -68,6 +100,7 @@ const SearchBar = () => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => setIsFocused(true)}
+                    onKeyDown={handleKeyDown}
                     placeholder="SEARCH COLLECTIONS..."
                     aria-label="Search products"
                     className="w-full bg-foreground/5 border border-white/5 rounded-2xl py-3 pl-12 pr-10 text-sm tracking-widest focus:outline-none focus:border-primary/30 focus:bg-foreground/10 transition-all duration-300 placeholder:text-foreground/30"
@@ -141,10 +174,11 @@ const SearchBar = () => {
                                             <div className="px-4 py-2 text-[10px] font-bold text-primary tracking-[0.2em] uppercase border-b border-white/5 mb-2">
                                                 Popular Products
                                             </div>
-                                            {trendingProducts.map((product) => (
+                                            {trendingProducts.map((product, idx) => (
                                                 <SuggestionItem
                                                     key={product._id}
                                                     product={product}
+                                                    isFocused={idx === focusedIndex}
                                                     onClick={() => product.slug && handleSuggestionClick(product.slug)}
                                                 />
                                             ))}
@@ -156,10 +190,11 @@ const SearchBar = () => {
                                     <div className="px-4 py-2 text-[10px] font-bold text-primary tracking-[0.2em] uppercase border-b border-white/5 mb-2">
                                         Found in Collection
                                     </div>
-                                    {suggestions.map((product) => (
+                                    {suggestions.map((product, idx) => (
                                         <SuggestionItem
                                             key={product._id}
                                             product={product}
+                                            isFocused={idx === focusedIndex}
                                             onClick={() => product.slug && handleSuggestionClick(product.slug)}
                                         />
                                     ))}
@@ -182,10 +217,13 @@ const SearchBar = () => {
 
 import { Product } from "@/types/product";
 
-const SuggestionItem = ({ product, onClick }: { product: Product, onClick: () => void }) => (
+const SuggestionItem = ({ product, onClick, isFocused }: { product: Product, onClick: () => void, isFocused?: boolean }) => (
     <button
         onClick={onClick}
-        className="w-full flex items-center gap-4 px-4 py-3 hover:bg-primary/10 transition-colors group/item"
+        className={clsx(
+            "w-full flex items-center gap-4 px-4 py-3 transition-colors group/item",
+            isFocused ? "bg-primary/20" : "hover:bg-primary/10"
+        )}
     >
         <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-white/10 shrink-0">
             <Image
@@ -240,5 +278,6 @@ const SuggestionItem = ({ product, onClick }: { product: Product, onClick: () =>
         </div>
     </button>
 );
+
 
 export default SearchBar;

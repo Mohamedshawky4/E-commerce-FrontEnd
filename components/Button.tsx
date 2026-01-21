@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
 import clsx from "clsx";
-import { m, HTMLMotionProps } from "framer-motion";
+import { m, HTMLMotionProps, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 import { Loader2 } from "lucide-react";
 
@@ -34,8 +34,30 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 20, stiffness: 300 };
+    const springX = useSpring(mouseX, springConfig);
+    const springY = useSpring(mouseY, springConfig);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (!buttonRef.current || variant !== "liquid") return;
+      const rect = buttonRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    const gradient = useTransform(
+      [springX, springY],
+      ([x, y]) => `radial-gradient(circle at ${x}px ${y}px, var(--primary) 0%, transparent 80%)`
+    );
+
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 hover:cursor-pointer active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 leading-tight";
+      "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed leading-tight";
 
     const variants: Record<ButtonVariant, string> = {
       primary:
@@ -43,7 +65,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       metal:
         "metal-button text-foreground",
       liquid:
-        "relative overflow-hidden bg-surface text-primary border border-primary/30 liquid-flow",
+        "relative overflow-hidden bg-surface text-primary border border-primary/30",
       outline:
         "border border-border text-foreground hover:bg-foreground/5",
       ghost:
@@ -64,9 +86,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <m.button
+        ref={(node) => {
+          if (typeof ref === "function") ref(node);
+          else if (ref) (ref as any).current = node;
+          (buttonRef as any).current = node;
+        }}
+        onMouseMove={handleMouseMove}
         whileHover={!disabled && !isLoading ? { scale: 1.01 } : {}}
-        whileTap={!disabled && !isLoading ? { scale: 0.98 } : {}}
-        ref={ref as any}
+        whileTap={!disabled && !isLoading ? { scale: 0.96 } : {}}
         disabled={disabled || isLoading}
         className={clsx(
           baseStyles,
@@ -90,17 +117,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </span>
         {variant === "liquid" && (
           <m.div
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0 opacity-30 pointer-events-none"
+            style={{ background: gradient }}
+          />
+        )}
+        {variant === "liquid" && (
+          <m.div
+            className="absolute inset-0 opacity-10 pointer-events-none"
             animate={{
               background: [
-                "radial-gradient(circle at 0% 0%, var(--primary) 0%, transparent 50%)",
-                "radial-gradient(circle at 100% 100%, var(--primary) 0%, transparent 50%)",
-                "radial-gradient(circle at 0% 100%, var(--primary) 0%, transparent 50%)",
-                "radial-gradient(circle at 100% 0%, var(--primary) 0%, transparent 50%)",
-                "radial-gradient(circle at 0% 0%, var(--primary) 0%, transparent 50%)",
+                "linear-gradient(45deg, transparent 0%, var(--primary) 50%, transparent 100%)",
+                "linear-gradient(225deg, transparent 0%, var(--primary) 50%, transparent 100%)",
               ],
+              left: ["-100%", "100%"],
             }}
-            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
           />
         )}
       </m.button>

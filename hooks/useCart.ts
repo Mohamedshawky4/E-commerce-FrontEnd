@@ -78,3 +78,44 @@ export const useClearCart = () => {
         },
     });
 };
+
+export const useApplyCoupon = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ code, cartTotal }: { code: string; cartTotal: number }) => {
+            const response = await api.post("/coupons/validate", { code, cartTotal });
+            return response.data;
+        },
+        onSuccess: (data) => {
+            // Usually we'd update a "checkout" or "cartExtras" query if it existed,
+            // but for now we'll just return it and let the component handle it or 
+            // we can store it in a local query if needed.
+            // Since coupons are usually validated against a specific cart.
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+        }
+    });
+};
+
+export const useApplyGiftCard = () => {
+    return useMutation({
+        mutationFn: async ({ code }: { code: string }) => {
+            const response = await api.post("/gift-cards/check", { code });
+            return response.data;
+        }
+    });
+};
+
+// Selection Helpers
+export const selectCartTotals = (cart: Cart | undefined, coupon?: any, giftCard?: any, shippingFee = 50) => {
+    if (!cart) return { subtotal: 0, itemsCount: 0, total: 0 };
+
+    const subtotal = cart.items.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    const itemsCount = cart.items.reduce((total, item) => total + item.quantity, 0);
+
+    const discount = coupon?.discountAmount || 0;
+    const giftCardApplied = giftCard?.appliedAmount || 0;
+    const total = Math.max(0, subtotal - discount - giftCardApplied + shippingFee);
+
+    return { subtotal, itemsCount, total };
+};
+
