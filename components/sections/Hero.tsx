@@ -158,12 +158,12 @@ const Hero = () => {
                                 <span className="text-[10px] font-black tracking-[0.5em] text-text-muted uppercase">Neural Network Active</span>
                             </m.div>
 
-                            <h1 className="text-8xl md:text-[10rem] xl:text-[12rem] font-black leading-[0.78] tracking-tighter flex flex-col perspective-1000">
-                                <span className="text-foreground relative">
+                            <h1 className="text-8xl md:text-[10rem] xl:text-[11rem] font-black leading-[0.8] tracking-tighter flex flex-col perspective-1000">
+                                <span className="text-foreground relative font-geist-mono">
                                     ELITE
-                                    <span className="absolute inset-0 text-primary/10 blur-sm translate-x-1 translate-y-1">ELITE</span>
+                                    <span className="absolute inset-0 text-primary/10 blur-md translate-x-1 translate-y-1">ELITE</span>
                                 </span>
-                                <span className="italic text-prismatic">
+                                <span className="italic text-prismatic mt-[-0.1em]">
                                     RETAIL
                                 </span>
                             </h1>

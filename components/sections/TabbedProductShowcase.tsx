@@ -18,9 +18,9 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-    { id: "featured", label: "Featured", endpoint: "/products?sort=-price&limit=8", linkHref: "/products" },
-    { id: "new", label: "New Arrivals", endpoint: "/products?sort=-createdAt&limit=8", linkHref: "/new-arrivals" },
-    { id: "top", label: "Best Sellers", endpoint: "/products?sort=-averageRating&limit=8" },
+    { id: "featured", label: "FEATURED_COLLECTION", endpoint: "/products?sort=-price&limit=8", linkHref: "/products" },
+    { id: "new", label: "NEW_TECH_PROTOCOLS", endpoint: "/products?sort=-createdAt&limit=8", linkHref: "/new-arrivals" },
+    { id: "top", label: "ELITE_TIER_ASSETS", endpoint: "/products?sort=-averageRating&limit=8" },
 ];
 
 const TabbedProductShowcase: React.FC = () => {
@@ -29,70 +29,69 @@ const TabbedProductShowcase: React.FC = () => {
 
     const { data: products, isLoading } = useFeaturedProducts(activeTab.endpoint);
 
-    const loading = isLoading;
-
     return (
-        <section className="py-32 w-full flex flex-col items-center overflow-hidden relative">
-            {/* Ambient Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+        <section className="py-24 md:py-32 w-full flex flex-col items-center overflow-hidden relative bg-surface/5">
+            {/* Monolith Texture Backdrop */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3 RIGHT%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
+            />
 
-            <div className="w-full max-w-[1600px] px-6 md:px-12 mb-16">
-                <div className="flex flex-col md:flex-row justify-between items-end gap-8">
-                    <div>
-                        <h2 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-linear-to-b from-foreground to-foreground/40 tracking-tighter uppercase mb-6">
-                            Curated For You
+            <div className="w-full max-w-[1600px] px-6 md:px-12 mb-20">
+                <div className="flex flex-col md:flex-row justify-between items-end gap-12 border-b border-white/5 pb-12">
+                    <div className="space-y-6">
+                        <div className="h-px w-12 bg-primary" />
+                        <h2 className="text-5xl md:text-7xl font-black text-foreground tracking-tighter uppercase leading-none">
+                            SIGNATURE<br />
+                            <span className="text-text-muted">DISCOVERY</span>
                         </h2>
 
-                        {/* Glass Tabs */}
-                        <div className="flex flex-wrap gap-2 p-1.5 rounded-full bg-foreground/5 backdrop-blur-md border border-white/5 inline-flex">
+                        {/* Precision Tab Bar */}
+                        <div className="flex gap-8 mt-12 bg-white/5 p-1 rounded-sm border border-white/5">
                             {tabs.map((tab) => (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTabId(tab.id)}
                                     className={`
-                        relative px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-500
-                        ${activeTabId === tab.id ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"}
-                        `}
+                                        relative px-4 py-2 text-[9px] font-black uppercase tracking-[0.4em] transition-all duration-300
+                                        ${activeTabId === tab.id ? "text-primary bg-white/5" : "text-text-muted hover:text-foreground"}
+                                    `}
                                 >
                                     {activeTabId === tab.id && (
                                         <m.div
-                                            layoutId="activeTabGlow"
-                                            className="absolute inset-0 bg-primary rounded-full shadow-[0_0_20px_-5px_var(--primary)]"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                            layoutId="precisionUnderline"
+                                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
                                         />
                                     )}
-                                    <span className="relative z-10">{tab.label}</span>
+                                    {tab.label}
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    {/* View All Link */}
                     {activeTab.linkHref && (
                         <Link
                             href={activeTab.linkHref}
-                            className="hidden md:flex group items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-muted-foreground hover:text-primary transition-colors"
+                            className="group flex items-center gap-4 text-[9px] font-black tracking-[0.3em] uppercase text-text-muted hover:text-primary transition-colors border border-white/10 px-6 py-3 rounded-sm hover:bg-white/5"
                         >
-                            View Collection
-                            <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            ACCESS_FULL_VAULT
+                            <ChevronRight size={10} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                     )}
                 </div>
             </div>
 
             <div className="relative w-full max-w-[1600px] px-4 md:px-8">
-                {/* Navigation Buttons */}
+                {/* Haptic Navigation Handles */}
                 <div className="absolute top-1/2 -translate-y-1/2 left-4 md:left-8 z-30 pointer-events-none w-full flex justify-between pr-8 md:pr-16">
-                    <button className="nav-prev-tabbed pointer-events-auto w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md flex items-center justify-center text-foreground hover:bg-foreground hover:text-background transition-all active:scale-95 disabled:opacity-0 cursor-pointer">
+                    <button className="nav-prev-tabbed pointer-events-auto h-16 w-10 bg-white/5 flex items-center justify-center text-foreground hover:bg-primary hover:text-black transition-all border border-white/10">
                         <ChevronLeft size={20} />
                     </button>
-                    <button className="nav-next-tabbed pointer-events-auto w-12 h-12 rounded-full border border-white/10 bg-black/40 backdrop-blur-md flex items-center justify-center text-foreground hover:bg-foreground hover:text-background transition-all active:scale-95 disabled:opacity-0 cursor-pointer">
+                    <button className="nav-next-tabbed pointer-events-auto h-16 w-10 bg-white/5 flex items-center justify-center text-foreground hover:bg-primary hover:text-black transition-all border border-white/10">
                         <ChevronRight size={20} />
                     </button>
                 </div>
 
                 <div className="min-h-[400px]">
-                    {/* Key changes to force re-render of swiper when tab changes */}
                     <Swiper
                         key={activeTabId}
                         modules={[Navigation, Autoplay]}
@@ -101,30 +100,29 @@ const TabbedProductShowcase: React.FC = () => {
                             nextEl: ".nav-next-tabbed",
                         }}
                         autoplay={{ delay: 5000, disableOnInteraction: false }}
-                        spaceBetween={24}
+                        spaceBetween={32}
                         slidesPerView={1.2}
                         centeredSlides={true}
-                        loop={false}
                         breakpoints={{
                             640: { slidesPerView: 2.5, centeredSlides: false },
                             1024: { slidesPerView: 4, centeredSlides: false },
-                            1280: { slidesPerView: 5, centeredSlides: false, spaceBetween: 32 },
+                            1280: { slidesPerView: 5, centeredSlides: false },
                         }}
-                        className="px-4! md:px-12! pb-12!"
+                        className="!px-6 md:!px-12 pb-12"
                     >
-                        {loading &&
+                        {isLoading ? (
                             Array.from({ length: 5 }).map((_, i) => (
-                                <SwiperSlide key={`skeleton-${i}`} className="flex justify-center">
+                                <SwiperSlide key={`skel-${i}`} className="flex justify-center">
                                     <ProductCardSkeleton />
                                 </SwiperSlide>
-                            ))}
-
-                        {!loading &&
+                            ))
+                        ) : (
                             products?.map((p: Product) => (
                                 <SwiperSlide key={p._id} className="flex justify-center h-full">
                                     <ProductCard product={p} />
                                 </SwiperSlide>
-                            ))}
+                            ))
+                        )}
                     </Swiper>
                 </div>
             </div>

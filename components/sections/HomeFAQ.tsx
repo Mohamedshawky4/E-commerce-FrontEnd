@@ -26,18 +26,18 @@ const HomeFAQ = () => {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     return (
-        <section className="py-24 px-6 md:px-12 bg-black/2 relative overflow-hidden">
+        <section className="py-24 px-6 md:px-12 bg-surface/5 w-full flex flex-col items-center relative overflow-hidden">
             {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[100px] rounded-full pointer-events-none -z-10 opacity-50" />
 
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto w-full">
                 <div className="text-center mb-16 space-y-4">
                     <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-foreground to-foreground/50">
                         Common Questions
                     </h2>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 w-full">
                     {faqs.map((faq, index) => (
                         <div
                             key={index}
@@ -57,7 +57,7 @@ const HomeFAQ = () => {
                                 </span>
                                 <div className={`
                                     p-2 rounded-full transition-all duration-300
-                                    ${openIndex === index ? 'bg-primary text-primary-foreground rotate-180' : 'bg-secondary text-muted-foreground group-hover:text-foreground'}
+                                    ${openIndex === index ? 'bg-primary text-primary-foreground rotate-180' : 'bg-white/5 text-muted-foreground group-hover:text-foreground'}
                                 `}>
                                     <Minus size={18} className={`transition-all ${openIndex === index ? 'opacity-100' : 'opacity-0 absolute'}`} />
                                     <Plus size={18} className={`transition-all ${openIndex === index ? 'opacity-0 absolute' : 'opacity-100'}`} />

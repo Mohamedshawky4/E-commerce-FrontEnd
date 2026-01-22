@@ -5,6 +5,7 @@ const FeatureGrid = dynamic(() => import('@/components/FeatureGrid'));
 const Newsletter = dynamic(() => import('@/components/sections/Newsletter'));
 const CategoriesSection = dynamic(() => import('@/components/sections/CategoriesSection'));
 const PromoBanner = dynamic(() => import('@/components/sections/PromoBanner'));
+const HomeFAQ = dynamic(() => import('@/components/sections/HomeFAQ'));
 
 import Hero from "@/components/sections/Hero";
 import { ShieldCheck, Truck, Headphones } from "lucide-react";
@@ -46,40 +47,37 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center  font-sans">
-      {/* <div className="absolute left-0 top-0 w-full h-full min-h-screen bg-gradient-to-r from-primary/5 via-transparent to-transparent pointer-events-none -z-10" /> */}
-
+    <main className="relative flex min-h-screen flex-col items-center justify-center  font-sans overflow-x-hidden">
       <Hero />
+
       <CategoriesSection />
 
-      {/* <div id="products-section"> */}
       <FeaturedSection
-        title="Featured Products"
-        endpoint="/products?sort=-price"
+        title="Featured Selection"
+        endpoint="/products?sort=-price&limit=8"
         linkHref="/products"
       />
-      {/* </div> */}
 
       <PromoBanner />
 
       <FeaturedSection
-        title="New Arrivals"
-        endpoint="/products?sort=-createdAt"
+        title="New Tech Drops"
+        endpoint="/products?sort=-createdAt&limit=8"
         linkHref="/new-arrivals"
       />
 
       <FeaturedSection
-        title="Top Rated"
-        endpoint="/products?sort=-averageRating"
+        title="Elite Tier Assets"
+        endpoint="/products?sort=-averageRating&limit=8"
       />
 
       <Testimonials />
 
       <FeatureGrid features={features} />
 
+      <HomeFAQ />
+
       <Newsletter />
-
-
     </main>
   );
 }

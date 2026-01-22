@@ -25,20 +25,20 @@ const FeatureGrid: React.FC<FeatureGridProps> = ({ features, className }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8 }}
-      className={`flex flex-wrap justify-center gap-10 mx-auto py-16 ${className}`}
+      className={`flex flex-wrap justify-center gap-12 mx-auto py-24 ${className}`}
     >
       {features.map((feature, index) => (
         <div
           key={index}
-          className="text-center group max-w-xs flex-1 basis-[300px] md:basis-[30%]"
+          className="text-center group max-w-xs flex-1 basis-[300px] md:basis-[28%] glass-card p-10 border-white/5 hover:border-primary/20 transition-all duration-500 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)]"
         >
           <div
-            className={`w-16 h-16 mx-auto mb-4 bg-linear-to-br from-${feature.color}/20 to-${feature.color}/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
+            className={`w-20 h-20 mx-auto mb-8 bg-primary/5 rounded-3xl flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/10 transition-all duration-500 border border-primary/10 shadow-inner`}
           >
             {feature.icon}
           </div>
-          <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-          <p className="text-muted-foreground text-sm">{feature.description}</p>
+          <h3 className="text-xl font-black uppercase tracking-widest mb-4 group-hover:text-primary transition-colors">{feature.title}</h3>
+          <p className="text-text-muted text-sm leading-relaxed font-medium">{feature.description}</p>
         </div>
       ))}
     </m.div>
