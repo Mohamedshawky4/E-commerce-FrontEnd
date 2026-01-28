@@ -11,6 +11,9 @@ export interface Review {
     product: string;
     rating: number;
     comment: string;
+    images?: string[];
+    videos?: string[];
+    isVerifiedPurchase?: boolean;
     likes: string[];
     createdAt: string;
 }
@@ -29,7 +32,7 @@ export const useProductReviews = (productIdOrSlug: string) => {
 export const useAddReview = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (newReview: { product: string; rating: number; comment: string }) => {
+        mutationFn: async (newReview: { product: string; rating: number; comment: string, images?: string[], videos?: string[] }) => {
             const { data } = await api.post("/reviews", newReview);
             return data.review;
         },
